@@ -9,12 +9,12 @@ exports.getUsers = async () => {
   return rows;
 };
 
-exports.getUserById = async (res) => {
+exports.getUserById = async (id) => {
   const query = `
 SELECT * FROM "users" WHERE "id" = $1
   `;
 
-  const value = [res.id];
+  const value = [id];
   const { rows } = await db.query(query, value);
 
   return rows;
@@ -31,20 +31,22 @@ exports.insert = async (data) => {
   return rows;
 };
 
-exports.update = async (data) => {
+exports.update = async (data, id) => {
   const query = `
   UPDATE "users"
   SET "email" = COALESCE(NULLIF($1, ''), "email")
   WHERE "id" = $2 RETURNING *`;
 
-  const value = [data.body.email, data.params.id];
-
+  const value = [data.email, id];
   const { rows } = await db.query(query, value);
   return rows;
 };
 
 exports.deleteUsers = async (id) => {
-  const query = 'DELETE FROM "users" WHERE id = $1 RETURNING *';
+  const query = `
+  DELETE FROM "users"
+  WHERE id = $1 RETURNING *
+  `;
   const { rows } = await db.query(query, [id]);
   return rows;
 };

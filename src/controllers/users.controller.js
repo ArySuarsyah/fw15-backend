@@ -30,7 +30,7 @@ exports.getAllUsers = async (req, res) => {
 
 exports.getUserById = async (req, res) => {
   try {
-    const data = await userModels.getUserById(req.params);
+    const data = await userModels.getUserById(req.params.id);
     return res.status(200).json({
       success: true,
       message: "Access success",
@@ -43,11 +43,14 @@ exports.getUserById = async (req, res) => {
 
 exports.updateUsers = async (req, res) => {
   try {
-    const data = await userModels.updateUsers(req.params);
+    const data = await userModels.update(
+      req.body,
+      req.params.id
+    )
     return res.json({
       success: true,
       message: "User updated!",
-      data: data,
+      results: data,
     });
   } catch (err) {
     if (err) return errorHandler(err, res);
