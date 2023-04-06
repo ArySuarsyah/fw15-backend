@@ -3,15 +3,18 @@ const userModels = require("../models/users.model");
 const errorHandler = require("../helpers/error.handler");
 
 exports.createUser = async (req, res) => {
-  try {
+  if (!req.body.password.lenght || !req.body.email.lenght) {
+    return res.status(400).json({
+      success: false,
+      message: "Please insert password or email",
+    });
+  } else {
     const data = await userModels.insert(req.body);
     return res.json({
       success: true,
       message: `Create user ${req.body.email}`,
       results: data,
     });
-  } catch (err) {
-    if (err) return errorHandler(err, res);
   }
 };
 
@@ -24,7 +27,7 @@ exports.getAllUsers = async (req, res) => {
       results: data,
     });
   } catch (err) {
-    if (err) return errorHandler;
+    if (err) return errorHandler(err, res);
   }
 };
 
@@ -43,10 +46,7 @@ exports.getUserById = async (req, res) => {
 
 exports.updateUsers = async (req, res) => {
   try {
-    const data = await userModels.update(
-      req.body,
-      req.params.id
-    )
+    const data = await userModels.update(req.body, req.params.id);
     return res.json({
       success: true,
       message: "User updated!",

@@ -8,10 +8,11 @@ const errorHandler = (err, res) => {
       success: false,
       message: "Email already exists",
     });
-  } 
+  }
   return res.status(500).json({
-    success: false,
-    message: err.message,
+    succes: false,
+    message: "Something happend in our backend",
+    error: err.message,
   });
 };
 

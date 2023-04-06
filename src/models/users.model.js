@@ -1,12 +1,17 @@
 const db = require("../helpers/db.helper");
 
 exports.getUsers = async () => {
+  try {
+
   const query = `
   SELECT * FROM "users"
   `;
   const { rows } = await db.query(query);
 
   return rows;
+  } catch (err) {
+    if (err) throw err;
+  }
 };
 
 exports.getUserById = async (id) => {
@@ -34,12 +39,12 @@ exports.insert = async (data) => {
 exports.update = async (data, id) => {
   const query = `
   UPDATE "users"
-  SET "email" = COALESCE(NULLIF($1, ''), "email")
-  WHERE "id" = $2 RETURNING *`;
+  SET "email" = COALESCE(NULLIF($1, ''), "email"), "password" = COALESCE(NULLIF($2, ''), "password")
+  WHERE "id" = $3 RETURNING *`;
 
-  const value = [data.email, id];
+  const value = [data.email, data.password, id];
   const { rows } = await db.query(query, value);
-  return rows;
+  return rows[0];
 };
 
 exports.deleteUsers = async (id) => {
@@ -50,3 +55,5 @@ exports.deleteUsers = async (id) => {
   const { rows } = await db.query(query, [id]);
   return rows;
 };
+
+
