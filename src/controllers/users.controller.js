@@ -2,69 +2,67 @@
 const userModels = require("../models/users.model");
 const errorHandler = require("../helpers/error.handler");
 
-exports.createUser = (req, res) => {
-  userModels.register(req.body, (err, data) => {
-    if (err) {
-      return errorHandler(err, res);
-    } else {
-      return res.json({
-        success: true,
-        message: "Register user successfully",
-        results: data.rows[0],
-      });
-    }
-  });
+exports.createUser = async (req, res) => {
+  try {
+    const data = await userModels.insert(req.body);
+    return res.json({
+      success: true,
+      message: `Create user ${req.body.email}`,
+      results: data,
+    });
+  } catch (err) {
+    if (err) return errorHandler(err, res);
+  }
 };
 
-exports.getAllUsers = (req, res) => {
-  userModels.getUsers((err, data) => {
-    if (err) {
-      return errorHandler(err, res);
-    } else {
-      return res.json({
-        success: true,
-        message: "List of all users",
-        results: data.rows,
-      });
-    }
-  });
+exports.getAllUsers = async (req, res) => {
+  try {
+    const data = await userModels.getUsers();
+    return res.json({
+      success: true,
+      message: "List of all users",
+      results: data,
+    });
+  } catch (err) {
+    if (err) return errorHandler;
+  }
 };
 
-exports.getUserById = (request, response) => {
-  userModels.getUserById(request.params, (err, data) => {
-    if (err) {
-      return response.status(500).json({
-        success: false,
-        message: "Access failed",
-      });
-    } else {
-      return response.status(200).json({
-        success: true,
-        message: "Access success",
-        data: data.rows[0],
-      });
-    }
-  });
+exports.getUserById = async (req, res) => {
+  try {
+    const data = await userModels.getUserById(req.params);
+    return res.status(200).json({
+      success: true,
+      message: "Access success",
+      data: data,
+    });
+  } catch (err) {
+    if (err) return errorHandler(err, res);
+  }
 };
 
-exports.updateUsers = (req, res) => {
-  userModels.updateUsers(req, (err, data) => {
-    console.log(data);
-    if (err) {
-      return errorHandler(err, res);
-    } else {
-      return res.status(200).json({
-        success: true,
-        message: "user created successfully",
-        result: data.rows[0],
-      });
-    }
-  });
+exports.updateUsers = async (req, res) => {
+  try {
+    const data = await userModels.updateUsers(req.params);
+    return res.json({
+      success: true,
+      message: "User updated!",
+      data: data,
+    });
+  } catch (err) {
+    if (err) return errorHandler(err, res);
+  }
 };
 
-exports.deleteUser = (req, res) => {
-  return res.json({
-    success: true,
-    message: `Delete user ${req.params.id} successfully`,
-  });
+exports.deleteUsers = async (req, res) => {
+  try {
+    const data = await userModels.deleteUsers(req.params.id);
+    return res.json({
+      success: true,
+      message: "Users deleted successfully",
+      results: data,
+    });
+  } catch (err) {
+    if (err) return errorHandler(err, res);
+  }
 };
