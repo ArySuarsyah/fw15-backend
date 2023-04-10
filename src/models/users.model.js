@@ -22,7 +22,7 @@ SELECT * FROM "users" WHERE "id" = $1
   const value = [id];
   const { rows } = await db.query(query, value);
 
-  return rows;
+  return rows[0];
 };
 
 exports.insert = async (data) => {
@@ -33,7 +33,7 @@ exports.insert = async (data) => {
 
   const { rows } = await db.query(query, value);
 
-  return rows;
+  return rows[0];
 };
 
 exports.update = async (data, id) => {
@@ -53,7 +53,7 @@ exports.deleteUsers = async (id) => {
   WHERE id = $1 RETURNING *
   `;
   const { rows } = await db.query(query, [id]);
-  return rows;
+  return rows[0];
 };
 
 
