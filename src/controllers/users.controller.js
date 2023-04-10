@@ -2,8 +2,10 @@ const userModels = require("../models/users.model");
 const errorHandler = require("../helpers/errorHandler");
 
 exports.createUser = async (req, res) => {
-  if (!req.body.email.length|| !req.body.password.length) {
-    console.log( req.body.email.length);
+  try {
+
+  if (!req.body.email.length || !req.body.password.length) {
+    console.log('ok');
     return res.status(400).json({
       success: false,
       message: "Please insert password or email",
@@ -12,15 +14,24 @@ exports.createUser = async (req, res) => {
     const data = await userModels.insert(req.body);
     return res.json({
       success: true,
-      message: `Create user ${req.body.email}`,
+      message: `Create user ${req.body.email} successfully`,
       results: data,
     });
+  }
+  } catch (err) {
+    return errorHandler(err, res)
   }
 };
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const data = await userModels.getUsers();
+    req.query.offset = parseInt(req.query.offset) || 1;
+    req.query.limit = parseInt(req.query.limit) || 5;
+    const filter = {
+      limit: req.query.limit,
+      offset: req.query.offset,
+    };
+    const data = await userModels.getUsers(filter);
     return res.json({
       success: true,
       message: "List of all users",

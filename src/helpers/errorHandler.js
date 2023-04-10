@@ -6,7 +6,7 @@ const errorHandler = (err, res) => {
   ) {
     return res.status(409).json({
       success: false,
-      message: "Email already exists",
+      message: "Error: Email already used!",
     });
   }
   return res.status(500).json({

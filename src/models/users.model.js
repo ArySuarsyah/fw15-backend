@@ -1,12 +1,15 @@
 const db = require("../helpers/db.helper");
 
-exports.getUsers = async () => {
+exports.getUsers = async (filter) => {
   try {
 
   const query = `
   SELECT * FROM "users"
+  LIMIT $1
+  OFFSET $2
   `;
-  const { rows } = await db.query(query);
+    const values = [filter.limit, filter.offset];
+  const { rows } = await db.query(query, values);
 
   return rows;
   } catch (err) {
