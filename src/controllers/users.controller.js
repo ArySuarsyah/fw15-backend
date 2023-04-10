@@ -2,7 +2,8 @@ const userModels = require("../models/users.model");
 const errorHandler = require("../helpers/errorHandler");
 
 exports.createUser = async (req, res) => {
-  if (!req.body.password.lenght || !req.body.email.lenght) {
+  if (!req.body.email.length|| !req.body.password.length) {
+    console.log( req.body.email.length);
     return res.status(400).json({
       success: false,
       message: "Please insert password or email",
