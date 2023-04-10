@@ -1,25 +1,23 @@
 const userModels = require("../models/users.model");
 const errorHandler = require("../helpers/errorHandler");
 
+
 exports.createUser = async (req, res) => {
   try {
-
-  if (!req.body.email.length || !req.body.password.length) {
-    console.log('ok');
-    return res.status(400).json({
-      success: false,
-      message: "Please insert password or email",
-    });
-  } else {
-    const data = await userModels.insert(req.body);
-    return res.json({
-      success: true,
-      message: `Create user ${req.body.email} successfully`,
-      results: data,
-    });
-  }
+    if (!req.body.email.length || !req.body.password.length) {
+      throw Error("Empty_Feild");
+    } else if (!req.body.email.includes("@") || req.body.email.includes(".")) {
+      throw Error("Wrong_email")
+    } else {
+      const data = await userModels.insert(req.body);
+      return res.json({
+        success: true,
+        message: `Create user ${req.body.email} successfully`,
+        results: data,
+      });
+    }
   } catch (err) {
-    return errorHandler(err, res)
+    return errorHandler(err, res);
   }
 };
 
@@ -27,12 +25,19 @@ exports.getAllUsers = async (req, res) => {
   try {
     req.query.offset = parseInt(req.query.offset) || 1;
     req.query.limit = parseInt(req.query.limit) || 5;
+    req.query.search = req.query.search || "";
+
     const filter = {
       limit: req.query.limit,
       offset: (req.query.offset - 1) * req.query.limit,
+      search: req.query.search,
+      sort: req.query.sort || 'id',
+      sortBy : req.query.sortBy || 'ASC'
     };
+
+    // console.log(filter.search);
     const data = await userModels.getUsers(filter);
-    return res.json({
+    return res.status(200).json({
       success: true,
       message: "List of all users",
       results: data,

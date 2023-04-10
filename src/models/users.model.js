@@ -2,16 +2,16 @@ const db = require("../helpers/db.helper");
 
 exports.getUsers = async (filter) => {
   try {
-
-  const query = `
-  SELECT * FROM "users"
-  LIMIT $1
-  OFFSET $2
+    const query = `
+    SELECT * FROM "users"
+    WHERE "email" LIKE $3
+    ORDER BY "${filter.sort}" ${filter.sortBy}
+    LIMIT $1
+    OFFSET $2
   `;
-    const values = [filter.limit, filter.offset];
-  const { rows } = await db.query(query, values);
-
-  return rows;
+    const values = [filter.limit, filter.offset, `%${filter.search}%`];
+    const { rows } = await db.query(query, values);
+    return rows;
   } catch (err) {
     if (err) throw err;
   }
@@ -58,5 +58,3 @@ exports.deleteUsers = async (id) => {
   const { rows } = await db.query(query, [id]);
   return rows[0];
 };
-
-

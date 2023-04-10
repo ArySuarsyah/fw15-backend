@@ -8,6 +8,16 @@ const errorHandler = (err, res) => {
       success: false,
       message: "Error: Email already used!",
     });
+  } else if (err.message == "Empty_field") {
+    return res.status(400).json({
+      success: false,
+      message: "Please insert password or email",
+    });
+  } else if (err.message == "Wrong_email") {
+    return res.status(400).json({
+      success: false,
+      message: "Error: Email invaid",
+    });
   }
   return res.status(500).json({
     succes: false,
