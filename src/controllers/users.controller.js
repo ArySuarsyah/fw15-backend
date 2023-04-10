@@ -29,7 +29,7 @@ exports.getAllUsers = async (req, res) => {
     req.query.limit = parseInt(req.query.limit) || 5;
     const filter = {
       limit: req.query.limit,
-      offset: req.query.offset,
+      offset: (req.query.offset - 1) * req.query.limit,
     };
     const data = await userModels.getUsers(filter);
     return res.json({

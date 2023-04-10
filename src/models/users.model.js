@@ -36,7 +36,7 @@ exports.insert = async (data) => {
 
   const { rows } = await db.query(query, value);
 
-  return rows[0];
+  return rows;
 };
 
 exports.update = async (data, id) => {
