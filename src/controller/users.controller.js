@@ -1,19 +1,24 @@
 const userModels = require("../models/users.model");
 const errorHandler = require("../helpers/errorHandler");
-
+const argon = require("argon2")
 
 exports.createUser = async (req, res) => {
   try {
     if (!req.body.email.length || !req.body.password.length) {
       throw Error("Empty_Feild");
-    } else if (!req.body.email.includes("@") || req.body.email.includes(".")) {
-      throw Error("Wrong_email")
+    } else if (!req.body.email.includes("@") || !req.body.email.includes(".")) {
+      throw Error("Wrong_email");
     } else {
-      const data = await userModels.insert(req.body);
+          const hash = await argon.hash(req.body.password);
+          const data = {
+            ...req.body,
+            password: hash,
+          };
+      const user = await userModels.insert(data);
       return res.json({
         success: true,
         message: `Create user ${req.body.email} successfully`,
-        results: data,
+        results: user,
       });
     }
   } catch (err) {
@@ -31,11 +36,10 @@ exports.getAllUsers = async (req, res) => {
       limit: req.query.limit,
       offset: (req.query.offset - 1) * req.query.limit,
       search: req.query.search,
-      sort: req.query.sort || 'id',
-      sortBy : req.query.sortBy || 'ASC'
+      sort: req.query.sort || "id",
+      sortBy: req.query.sortBy || "ASC",
     };
 
-    // console.log(filter.search);
     const data = await userModels.getUsers(filter);
     return res.status(200).json({
       success: true,
@@ -43,14 +47,13 @@ exports.getAllUsers = async (req, res) => {
       results: data,
     });
   } catch (err) {
-    if (err) return errorHandler(err, res);
+    return errorHandler(err, res);
   }
 };
 
 exports.getUserById = async (req, res) => {
   try {
     const data = await userModels.getUserById(req.params.id);
-    console.log(data);
     if (data) {
       return res.status(200).json({
         success: true,

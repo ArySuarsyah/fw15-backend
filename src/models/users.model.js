@@ -28,11 +28,22 @@ SELECT * FROM "users" WHERE "id" = $1
   return rows[0];
 };
 
+exports.getUserByEmail = async (email) => {
+  const query = `
+SELECT * FROM "users" WHERE "email" = $1
+  `;
+
+  const value = [email];
+  const { rows } = await db.query(query, value);
+
+  return rows[0];
+};
+
 exports.insert = async (data) => {
   const query = `
-  INSERT INTO users ("email", "password") VALUES ($1, $2) RETURNING *
+  INSERT INTO users ("fullName", "email", "password") VALUES ($1, $2, $3) RETURNING *
   `;
-  const value = [data.email, data.password];
+  const value = [data.fullName, data.email, data.password];
 
   const { rows } = await db.query(query, value);
 
@@ -46,6 +57,17 @@ exports.update = async (data, id) => {
   WHERE "id" = $3 RETURNING *`;
 
   const value = [data.email, data.password, id];
+  const { rows } = await db.query(query, value);
+  return rows[0];
+};
+
+exports.updatePassword = async (password, id) => {
+  const query = `
+  UPDATE "users"
+  SET "password" = COALESCE(NULLIF($1, ''), "password")
+  WHERE "id" = $2 RETURNING *`;
+
+  const value = [password, id];
   const { rows } = await db.query(query, value);
   return rows[0];
 };
