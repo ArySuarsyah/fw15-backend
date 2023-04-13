@@ -1,6 +1,6 @@
 const userModels = require("../models/users.model");
 const errorHandler = require("../helpers/errorHandler");
-const argon = require("argon2")
+const argon = require("argon2");
 
 exports.createUser = async (req, res) => {
   try {
@@ -9,11 +9,14 @@ exports.createUser = async (req, res) => {
     } else if (!req.body.email.includes("@") || !req.body.email.includes(".")) {
       throw Error("Wrong_email");
     } else {
-          const hash = await argon.hash(req.body.password);
-          const data = {
-            ...req.body,
-            password: hash,
-          };
+      const hash = await argon.hash(req.body.password);
+      const data = {
+        ...req.body,
+        password: hash,
+      };
+      if (req.file) {
+        data.picture = req.file.filename;
+      }
       const user = await userModels.insert(data);
       return res.json({
         success: true,
@@ -73,12 +76,17 @@ exports.getUserById = async (req, res) => {
 
 exports.updateUsers = async (req, res) => {
   try {
-    const data = await userModels.update(req.body, req.params.id);
-    if (data) {
+      const hash = await argon.hash(req.body.password);
+      const data = {
+        ...req.body,
+        password: hash,
+      };
+    const userData = await userModels.update(data, req.params.id);
+    if (userData) {
       return res.json({
         success: true,
         message: "User updated!",
-        results: data,
+        results: userData,
       });
     }
     return res.status(404).json({

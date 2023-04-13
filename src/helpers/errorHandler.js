@@ -59,6 +59,13 @@ const errorHandler = (err, res) => {
     });
   }
 
+  if (err.message.includes("File too large")) {
+    return res.status(400).json({
+      succes: false,
+      message: "Error: File too large",
+    });
+  }
+
   if (err.message == "Password unmatch") {
     return res.status(400).json({
       success: false,

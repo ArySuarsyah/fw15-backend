@@ -28,13 +28,6 @@ exports.login = async (req, res) => {
 
 exports.register = async (req, res) => {
   try {
-    const { email, password, confirmPassword } = req.body;
-    if (!email || !password || !confirmPassword) {
-      throw Error("Empty_Feild");
-    }
-    if (!email.includes("@") || !email.includes(".")) {
-      throw Error("Wrong_email");
-    }
     if (password !== confirmPassword) {
       throw Error("Password unmatch");
     }

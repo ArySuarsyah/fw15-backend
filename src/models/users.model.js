@@ -41,9 +41,9 @@ SELECT * FROM "users" WHERE "email" = $1
 
 exports.insert = async (data) => {
   const query = `
-  INSERT INTO users ("fullName", "email", "password") VALUES ($1, $2, $3) RETURNING *
+  INSERT INTO users ("fullName", "email", "password", "picture") VALUES ($1, $2, $3, $4) RETURNING *
   `;
-  const value = [data.fullName, data.email, data.password];
+  const value = [data.fullName, data.email, data.password, data.picture];
 
   const { rows } = await db.query(query, value);
 
@@ -53,10 +53,10 @@ exports.insert = async (data) => {
 exports.update = async (data, id) => {
   const query = `
   UPDATE "users"
-  SET "email" = COALESCE(NULLIF($1, ''), "email"), "password" = COALESCE(NULLIF($2, ''), "password")
-  WHERE "id" = $3 RETURNING *`;
+  SET "fullName" = COALESCE(NULLIF($1, ''), "fullName"), "email" = COALESCE(NULLIF($2, ''), "email"), "password" = COALESCE(NULLIF($3, ''), "password"),"picture" = COALESCE(NULLIF($4, ''), "picture")
+  WHERE "id" = $5 RETURNING *`;
 
-  const value = [data.email, data.password, id];
+  const value = [data.fullName, data.email, data.password, data.picture, id];
   const { rows } = await db.query(query, value);
   return rows[0];
 };

@@ -1,11 +1,12 @@
 const usersRouter = require("express").Router();
 
-const userController = require('../controller/users.controller')
+const userController = require('../controller/users.controller');
+const uploadMiddleware = require("../middlewares/upload.middlewares");
 
 usersRouter.get("/", userController.getAllUsers);
-usersRouter.post("/", userController.createUser);
+usersRouter.post("/", uploadMiddleware('picture'), userController.createUser);
 usersRouter.get("/:id", userController.getUserById);
-usersRouter.patch("/:id", userController.updateUsers);
+usersRouter.patch("/:id", uploadMiddleware('picture'), userController.updateUsers);
 usersRouter.delete("/:id", userController.deleteUsers);
 
 
