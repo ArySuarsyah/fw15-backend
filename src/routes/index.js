@@ -2,15 +2,12 @@ const authMiddleware = require("../middlewares/auth.middleware");
 
 const router = require("express").Router();
 
-router.get("/", (request, response) => {
-  return response.json({
-    success: true,
-    message: "backend is running well",
-  });
-});
 
 router.use("/auth", require("./auth.router"));
-router.use("/admin", authMiddleware, require("./admin.router"));
+router.use("/profile", require("./profileRouter"));
+router.use("/events", require("./eventsRouter"));
+router.use("/admin", authMiddleware, require("./admin/admin.router"));
+
 
 router.use("*", (request, response) => {
   return response.status(404).json({
