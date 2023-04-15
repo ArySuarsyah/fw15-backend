@@ -1,16 +1,15 @@
-const eventModel = require("../models/eventsModel");
+const citiesModel = require('../models/citiesModel')
 const fileRemover = require("../helpers/fileRemover");
 const errorHandler = require("../helpers/errorHandler");
 const filterData = require("../helpers/filter.helper");
 
-exports.getEvents = async (req, res) => {
+exports.getCities = async (req, res) => {
   try {
-    console.log("ok");
     const filter = filterData(req.query);
-    const data = await eventModel.getEvents(filter);
+    const data = await citiesModel.getCities(filter);
     return res.status(200).json({
       success: false,
-      message: "List all Events",
+      message: "List all Events Categories",
       results: data,
     });
   } catch (err) {
@@ -18,15 +17,15 @@ exports.getEvents = async (req, res) => {
   }
 };
 
-exports.createEvents = async (req, res) => {
+exports.createCities = async (req, res) => {
   try {
     if (req.file) {
       req.body.picture = req.file.createEventfilename;
     }
-    const event = await eventModel.createEvents(req.body);
+    const event = await citiesModel.createCities(req.body);
     return res.json({
       success: true,
-      message: `Create Events ${req.body.title} successfully`,
+      message: `Create Events Categories ${event.id} successfully`,
       results: event,
     });
   } catch (err) {
@@ -35,9 +34,11 @@ exports.createEvents = async (req, res) => {
   }
 };
 
-exports.getEventsById = async (req, res) => {
+exports.getCitiesById = async (req, res) => {
   try {
-    const data = await eventModel.getEventsById(req.params.id);
+    const data = await citiesModel.getCitiesById(
+      req.params.id
+    );
     if (data) {
       return res.status(200).json({
         success: true,
@@ -47,7 +48,7 @@ exports.getEventsById = async (req, res) => {
     } else {
       return res.status(404).json({
         success: false,
-        message: "event not found!",
+        message: "Event categories not found!",
       });
     }
   } catch (err) {
@@ -55,22 +56,25 @@ exports.getEventsById = async (req, res) => {
   }
 };
 
-exports.updateEvents = async (req, res) => {
+exports.updateCities = async (req, res) => {
   try {
     const data = {
       ...req.body,
     };
-    const eventData = await eventModel.updateEvents(data, req.params.id);
+    const eventData = await citiesModel.updateCities(
+      data,
+      req.params.id
+    );
     if (eventData) {
       return res.json({
         success: true,
-        message: "event updated!",
+        message: "Event updated!",
         results: eventData,
       });
     }
     return res.status(404).json({
       success: false,
-      message: "event not found!",
+      message: "Event not found!",
     });
   } catch (err) {
     fileRemover(req.file);
@@ -78,13 +82,15 @@ exports.updateEvents = async (req, res) => {
   }
 };
 
-exports.deleteEvents = async (req, res) => {
+exports.deleteCities = async (req, res) => {
   try {
-    const data = await eventModel.deleteEvents(req.params.id);
+    const data = await citiesModel.deleteCities(
+      req.params.id
+    );
     if (data) {
       return res.json({
         success: true,
-        message: "events deleted successfully",
+        message: "Events Categories deleted successfully",
         results: data,
       });
     }
