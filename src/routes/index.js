@@ -8,6 +8,14 @@ router.use("/events", require("./events/event.routes"));
 router.use("/eventsCategories", require("./eventsCategoriesRouter"));
 router.use("/cities", require("./citiesRouter"));
 router.use("/partners", require("./partnersRouter"));
+router.use("/payment", require("./paymentMethodRouter"));
+router.use("/reservation", require("./reservationsRouter"));
+router.use("/reservationSection", require("./reservationSectionRouter"));
+router.use("/reservationStatus", require("./reservationStatusRouter"));
+router.use("/reservationTicket", require("./reservationTicketRouter"));
+router.use("/wishlist", require("./wishlistRouter"));
+router.use("/categories", require("./categoriesRouter"));
+
 
 
 
