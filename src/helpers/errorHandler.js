@@ -73,11 +73,25 @@ const errorHandler = (err, res) => {
     });
   }
 
-  console.log(err.message);
+  if(err.message.includes(`invalid input syntax for type boolean:`)) {
+    return res.status(400).json({
+      succes: false,
+      message: "Error: Invalid gender value",
+    });
+  }
+
+  if (err.message.includes("invalid input syntax for type date:")) {
+    return res.status(400).json({
+      succes: false,
+      message: "Error: Invalid birthdate value",
+    });
+  }
+    console.log(err.message);
   return res.status(500).json({
     succes: false,
     message: "Something happend in our backend",
   });
 };
+
 
 module.exports = errorHandler;

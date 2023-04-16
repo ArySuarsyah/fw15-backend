@@ -44,8 +44,8 @@ exports.getAllUsers = async (req, res) => {
       sort: req.query.sort || "id",
       sortBy: req.query.sortBy || "ASC",
     };
-
     const data = await userModels.getUsers(filter);
+console.log('ok');
     return res.status(200).json({
       success: true,
       message: "List of all users",

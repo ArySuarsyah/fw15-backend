@@ -5,22 +5,22 @@ const filterData = require("../helpers/filter.helper");
 
 exports.getProfile = async (req, res) => {
   try {
-    const filter = filterData(req.query)
-  const data = await profileModels.getProfile(filter)
-  return res.status(200).json({
-    success: false,
-    message: 'List all profile',
-    results: data
-  })
+    const filter = filterData(req.query);
+    const data = await profileModels.getProfile(filter);
+    return res.status(200).json({
+      success: false,
+      message: "List all profile",
+      results: data,
+    });
   } catch (err) {
-    return errorHandler(err, res)
+    return errorHandler(err, res);
   }
-}
+};
 
 exports.createProfile = async (req, res) => {
   try {
     if (req.file) {
-      req.body.picture = req.file.createUserfilename;
+      req.body.picture = req.file.filename;
     }
     const user = await profileModels.createProfile(req.body);
     return res.json({
@@ -33,7 +33,6 @@ exports.createProfile = async (req, res) => {
     return errorHandler(err, res);
   }
 };
-
 
 exports.getProfileById = async (req, res) => {
   try {
@@ -55,13 +54,15 @@ exports.getProfileById = async (req, res) => {
   }
 };
 
-
-
 exports.updateProfile = async (req, res) => {
   try {
     const data = {
       ...req.body,
     };
+    if (req.file) {
+      data.picture = req.file.filename;
+    }
+    
     const userData = await profileModels.updateProfile(data, req.params.id);
     if (userData) {
       return res.json({
@@ -98,4 +99,3 @@ exports.deleteProfile = async (req, res) => {
     return errorHandler(err, res);
   }
 };
-

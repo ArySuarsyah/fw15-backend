@@ -9,7 +9,7 @@ exports.getPartners = async (req, res) => {
     const data = await partnersModel.getPartners(filter);
     return res.status(200).json({
       success: false,
-      message: "List all Events Categories",
+      message: "List all Partners",
       results: data,
     });
   } catch (err) {
@@ -28,7 +28,7 @@ exports.createPartners = async (req, res) => {
     const event = await partnersModel.createPartners(data);
     return res.json({
       success: true,
-      message: `Create Events Categories ${event.id} successfully`,
+      message: `Create Partners ${event.id} successfully`,
       results: event,
     });
   } catch (err) {
@@ -89,7 +89,7 @@ exports.deletePartners = async (req, res) => {
     if (data) {
       return res.json({
         success: true,
-        message: "Events Categories deleted successfully",
+        message: "Partners deleted successfully",
         results: data,
       });
     }

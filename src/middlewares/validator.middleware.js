@@ -1,4 +1,4 @@
-const { body, validationResult } = require("express-validator");
+const { body, param, validationResult } = require("express-validator");
 const fileRemover = require("../helpers/fileRemover");
 // const errorHandler = require('../helpers/errorHandler');
 
@@ -17,6 +17,11 @@ const passwordRequirement = {
   pointsForContainingSymbol: 0,
 };
 
+const minMaxValue = {
+  min: 3,
+  max: 100,
+};
+
 const emailFormat = body("email").isEmail().withMessage("Email is invalid");
 
 const strongPassword = body("password")
@@ -24,8 +29,34 @@ const strongPassword = body("password")
   .withMessage("Must be 8 caracteres, 1 uppercase, 1 lowercase, 1 number.");
 
 const fullNameFormat = body("fullName")
-  .isFloat({min:3, max:80})
+  .isAlpha()
   .withMessage("Name is invalid!");
+
+const idParamsFormat = param("id").isFloat().withMessage("Id is invalid");
+
+const name = body("name").isAlpha().withMessage("Name is invalid");
+const eventCategoriesFormat = {
+  eventId: body("eventId").isFloat().withMessage("Event Id is invalid"),
+  categoryId: body("categoryId").isNumeric().withMessage("Category Id invalid"),
+};
+
+const createProfileFormat = {
+  fullName: fullNameFormat,
+  phoneNumber: body("phoneNumber")
+    .isLength(minMaxValue)
+    .withMessage("Phone number is invalid"),
+  gender: body("gender").isBoolean().withMessage("Gender input invalid"),
+  profession: body("profession")
+    .isAlpha()
+    .withMessage("Profession invalid"),
+  nationality: body("nationality")
+    .isAlpha()
+    .withMessage("Nationality invalid"),
+  // birthdate: body("birthdate").isDate().withMessage("Birth date is invalid"),
+};
+
+
+
 
 const rules = {
   authLogin: [
@@ -33,15 +64,22 @@ const rules = {
     body("password").isLength({ min: 1 }).withMessage("Password invalid"),
   ],
   authRegister: [fullNameFormat, emailFormat, strongPassword],
-  profile:[fullNameFormat]
+  createProfile: Object.values(createProfileFormat),
+  updateProfile: [Object.values(createProfileFormat), idParamsFormat],
+  deleteProfile: [idParamsFormat],
+  paramsId: [idParamsFormat],
+  createEventCat: Object.values(eventCategoriesFormat),
+  updateEventCat: [Object.values(eventCategoriesFormat), idParamsFormat],
+  deleteEventCat: [idParamsFormat],
+  createCities: [name],
+  updateCities: [name, idParamsFormat],
 };
 
 const validator = (req, res, next) => {
   const errors = validationResult(req);
   try {
-
     if (!errors.isEmpty()) {
-      fileRemover(req.file)
+      fileRemover(req.file);
       throw Error("validation");
     }
     return next();
