@@ -1,19 +1,28 @@
 const paymentMethod = require("express").Router();
 const paymentMethodController = require("../controller/paymentMethodController");
 const uploadMiddleware = require("../middlewares/upload.middlewares");
+const validate = require("../middlewares/validator.middleware");
 
 paymentMethod.get("/", paymentMethodController.getPaymentMethod);
 paymentMethod.post(
   "/",
-  uploadMiddleware("picture"),
+  uploadMiddleware("picture"), validate("nameFormat"),
   paymentMethodController.createPaymentMethod
 );
-paymentMethod.get("/:id", paymentMethodController.getPaymentMethodById);
+paymentMethod.get(
+  "/:id",
+  validate("paramsId"),
+  paymentMethodController.getPaymentMethodById
+);
 paymentMethod.patch(
   "/:id",
-  uploadMiddleware("picture"),
+  uploadMiddleware("picture"), validate("updateName"),
   paymentMethodController.updatePaymentMethod
 );
-paymentMethod.delete("/:id", paymentMethodController.deletePaymentMethod);
+paymentMethod.delete(
+  "/:id",
+  validate("paramsId"),
+  paymentMethodController.deletePaymentMethod
+);
 
 module.exports = paymentMethod;

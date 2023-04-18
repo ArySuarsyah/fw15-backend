@@ -1,23 +1,27 @@
 const wishlist = require("express").Router();
 const wishlistController = require("../controller/wishlistController");
-const uploadMiddleware = require("../middlewares/upload.middlewares");
+const validate = require("../middlewares/validator.middleware");
 
 wishlist.get("/", wishlistController.getWishlist);
 
 wishlist.post(
   "/",
-  uploadMiddleware("picture"),
+  validate("createWhislist"),
   wishlistController.createWishlist
 );
 
-wishlist.get("/:id", wishlistController.getWishlistById);
+wishlist.get("/:id", validate("paramsId"), wishlistController.getWishlistById);
 
 wishlist.patch(
   "/:id",
-  uploadMiddleware("picture"),
+  validate("createWhislist"),
   wishlistController.updateWishlist
 );
 
-wishlist.delete("/:id", wishlistController.deleteWishlist);
+wishlist.delete(
+  "/:id",
+  validate("parmasId"),
+  wishlistController.deleteWishlist
+);
 
 module.exports = wishlist;

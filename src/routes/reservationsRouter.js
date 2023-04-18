@@ -1,19 +1,28 @@
 const reservation = require("express").Router();
 const reservationController = require("../controller/reservatoinsController");
-const uploadMiddleware = require("../middlewares/upload.middlewares");
+
+const validate = require("../middlewares/validator.middleware");
 
 reservation.get("/", reservationController.getReservations);
 reservation.post(
   "/",
-  uploadMiddleware("picture"),
+  validate("resevationCreate"),
   reservationController.createReservations
 );
-reservation.get("/:id", reservationController.getReservationById);
+reservation.get(
+  "/:id",
+  validate("paramsId"),
+  reservationController.getReservationById
+);
 reservation.patch(
   "/:id",
-  uploadMiddleware("picture"),
+  validate("resevationUpdate"),
   reservationController.updateReservations
 );
-reservation.delete("/:id", reservationController.deleteReservations);
+reservation.delete(
+  "/:id",
+  validate("paramsId"),
+  reservationController.deleteReservations
+);
 
 module.exports = reservation;

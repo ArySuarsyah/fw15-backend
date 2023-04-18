@@ -8,11 +8,11 @@ cities.get("/", citiesController.getCities);
 cities.post(
   "/",
   uploadMiddleware("picture"),
-  validate("createCities"),
+  validate("nameFormat"),
   citiesController.createCities
 );
 cities.get("/:id", validate("paramsId"), citiesController.getCitiesById);
-cities.patch("/:id", uploadMiddleware("picture"), validate("updateCities"), citiesController.updateCities);
+cities.patch("/:id", uploadMiddleware("picture"), validate("updateName"), citiesController.updateCities);
 cities.delete("/:id", validate("paramsId"), citiesController.deleteCities);
 
 module.exports = cities;

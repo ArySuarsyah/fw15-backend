@@ -7,14 +7,14 @@ partner.get("/", partnersCotroller.getPartners);
 partner.post(
   "/",
   uploadMiddleware("picture"),
-  validate("createCities"),
+  validate("nameFormat"),
   partnersCotroller.createPartners
 );
 partner.get("/:id", validate("paramsId"), partnersCotroller.getPartnersById);
 partner.patch(
   "/:id",
   uploadMiddleware("picture"),
-  validate("updateCities"),
+  validate("updateName"),
   partnersCotroller.updatePartners
 );
 partner.delete("/:id", validate("paramsId"), partnersCotroller.deletePartners);

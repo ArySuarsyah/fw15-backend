@@ -1,21 +1,26 @@
 const reservationSection = require("express").Router();
 const reservationController = require("../controller/reservationSectionController");
-const uploadMiddleware = require("../middlewares/upload.middlewares");
+const validate = require("../middlewares/validator.middleware");
 
 reservationSection.get("/", reservationController.getReservationSection);
 reservationSection.post(
   "/",
-  uploadMiddleware("picture"),
+  validate("createReservSection"),
   reservationController.createReservationSection
 );
-reservationSection.get("/:id", reservationController.getReservationSectionById);
+reservationSection.get(
+  "/:id",
+  validate("paramsId"),
+  reservationController.getReservationSectionById
+);
 reservationSection.patch(
   "/:id",
-  uploadMiddleware("picture"),
+  validate("updateReservSection"),
   reservationController.updateReservationSection
 );
 reservationSection.delete(
   "/:id",
+  validate("paramsId"),
   reservationController.deleteReservationSection
 );
 

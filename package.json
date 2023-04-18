@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "lint:fix": "eslint --fix index.js src/**/*.js",
+    "lint": "eslint index.js src/**/*.js"
   },
   "keywords": [],
   "author": "",
