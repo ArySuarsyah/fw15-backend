@@ -95,6 +95,113 @@ const eventFormat = {
     .withMessage("Please Insert min 5 character"),
 };
 
+// Validator Update Format
+
+const updateProfileFormat = {
+  fullName: body()
+    .optional()
+    .isAlpha()
+    .withMessage("Fulname is invalid")
+    .isLength()
+    .withMessage("Min 3 character, max 100 character"),
+  phoneNumber: body("phoneNumber")
+    .optional()
+    .isLength(minMaxValue)
+    .withMessage("Phone number is invalid"),
+  gender: body("gender")
+    .optional()
+    .isBoolean()
+    .withMessage("Gender input invalid"),
+  profession: body("profession")
+    .optional()
+    .isAlpha()
+    .withMessage("Profession invalid"),
+  nationality: body("nationality")
+    .optional()
+    .isAlpha()
+    .withMessage("Nationality invalid"),
+  birthdate: body("birthdate")
+    .optional()
+    .isDate()
+    .withMessage("Birth date is invalid"),
+  idParamas: idParamsFormat,
+};
+
+const updateCategoriesFormat = {
+  eventId: body("eventId")
+    .optional()
+    .isFloat()
+    .withMessage("Event Id is invalid"),
+  categoryId: body("categoryId")
+    .optional()
+    .isNumeric()
+    .withMessage("Category Id invalid"),
+  idParams: idParamsFormat,
+};
+
+const updateReservationFormat = {
+  eventId: body("eventId")
+    .optional()
+    .isFloat()
+    .withMessage("Event Id is invalid"),
+  userId: body("userId").optional().isNumeric().withMessage("User Id invalid"),
+  statusId: body("statusId")
+    .optional()
+    .isNumeric()
+    .withMessage("Status Id invalid"),
+  paramsId: idParamsFormat,
+};
+
+const updateReservSectionFormat = {
+  name: body("name")
+    .optional()
+    .isAlpha()
+    .withMessage("Name is invalid")
+    .isLength(minMaxValue)
+    .withMessage("Min length 3, max length 100"),
+  price: body("price")
+    .optional()
+    .isNumeric()
+    .withMessage("Price value must be number"),
+  paramsId: idParamsFormat,
+};
+
+const updateReservTicketFormat = {
+  reservationId: body("reservationId")
+    .optional()
+    .isNumeric()
+    .withMessage("Reservation Id is invalid!"),
+  sectionId: body("sectionId")
+    .optional()
+    .isNumeric()
+    .withMessage("Section Id is invalid"),
+  quantityId: body("quantityId")
+    .optional()
+    .isNumeric()
+    .withMessage("Quantity Id is invalid!"),
+  paramsId: idParamsFormat,
+};
+
+const updateWishlistFormat = {
+  eventId: body("eventId").optional().isFloat().withMessage("Event Id is invalid"),
+  userId: body("userId").optional().isNumeric().withMessage("User Id invalid"),
+  paramsId: idParamsFormat
+};
+
+const updateEventFormat = {
+  title: body("title").optional()
+    .isAlpha()
+    .withMessage("Title is invalid")
+    .isLength()
+    .withMessage("Title length is invalid"),
+  date: body("date").optional().isDate().withMessage("Event date is invalid"),
+  cityId: body("cityId").optional().isNumeric().withMessage("City Id is invalid"),
+  description: body("description").optional()
+    .isLength({ min: 5 })
+    .withMessage("Please Insert min 5 character"),
+  idParamas: idParamsFormat
+};
+
 // Validator Rules
 
 const rules = {
@@ -107,21 +214,21 @@ const rules = {
   updateName: [name, idParamsFormat],
   authRegister: [fullNameFormat, emailFormat, strongPassword],
   createProfile: Object.values(createProfileFormat),
-  updateProfile: [Object.values(createProfileFormat), idParamsFormat],
+  updateProfile: Object.values(updateProfileFormat), //
   deleteProfile: [idParamsFormat],
   createEventCat: Object.values(eventCategoriesFormat),
-  updateEventCat: [Object.values(eventCategoriesFormat), idParamsFormat],
+  updateEventCat: Object.values(updateCategoriesFormat), //
   deleteEventCat: [idParamsFormat],
   resevationCreate: Object.values(createReservationFormat),
-  resevationUpdate: [Object.values(createReservationFormat), idParamsFormat],
+  resevationUpdate: Object.values(updateReservationFormat), //
   createReservSection: Object.values(reservSectionFormat),
-  updateReservSection: [Object.values(reservSectionFormat), idParamsFormat],
+  updateReservSection: Object.values(updateReservSectionFormat), //
   createReservTicket: Object.values(reservTicketFormat),
-  updateReservTicket: [Object.values(reservTicketFormat), idParamsFormat],
+  updateReservTicket: Object.values(updateReservTicketFormat), //
   creatWishlist: Object.values(wishlistFormat),
-  updateWishlist: [Object.values(wishlistFormat), idParamsFormat],
+  updateWishlist: Object.values(updateWishlistFormat),
   createEvent: Object.values(eventFormat),
-  updateEven: [Object.values(eventFormat), idParamsFormat],
+  updateEven: Object.values(updateEventFormat),
 };
 
 const validator = (req, res, next) => {
