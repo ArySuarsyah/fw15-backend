@@ -95,6 +95,9 @@ const eventFormat = {
     .withMessage("Please Insert min 5 character"),
 };
 
+
+
+
 // Validator Update Format
 
 const updateProfileFormat = {
@@ -201,6 +204,10 @@ const updateEventFormat = {
     .withMessage("Please Insert min 5 character"),
   idParamas: idParamsFormat
 };
+
+
+
+
 
 // Validator Rules
 
