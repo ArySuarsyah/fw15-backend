@@ -4,13 +4,13 @@ const eventsController = require("../../controller/eventsController");
 const uploadMiddleware = require("../../middlewares/upload.middlewares");
 const validate = require("../../middlewares/validator.middleware");
 
-eventRouter.get(
+eventRouter.get("/", eventsController.getEvents);
+eventRouter.post(
   "/",
   uploadMiddleware("picture"),
   validate("createEvent"),
-  eventsController.getEvents
+  eventsController.createEvents
 );
-eventRouter.post("/", eventsController.createEvents);
 eventRouter.get(
   "/:id",
   validate("updateEvent"),

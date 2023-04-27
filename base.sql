@@ -13,6 +13,7 @@ CREATE TABLE
 CREATE TABLE
     "profile" (
         "id" INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+        "userId", INTEGER,
         "picture" VARCHAR(225),
         "fullName" VARCHAR(225),
         "phoneNumber" VARCHAR(225),

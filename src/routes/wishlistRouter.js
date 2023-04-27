@@ -6,7 +6,7 @@ wishlist.get("/", wishlistController.getWishlist);
 
 wishlist.post(
   "/",
-  validate("createWhislist"),
+  validate("creatWishlist"),
   wishlistController.createWishlist
 );
 
@@ -14,13 +14,13 @@ wishlist.get("/:id", validate("paramsId"), wishlistController.getWishlistById);
 
 wishlist.patch(
   "/:id",
-  validate("createWhislist"),
+  validate("updateWishlist"),
   wishlistController.updateWishlist
 );
 
 wishlist.delete(
   "/:id",
-  validate("parmasId"),
+  validate("paramsId"),
   wishlistController.deleteWishlist
 );
 

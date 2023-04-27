@@ -23,11 +23,11 @@ exports.getProfile = async (filter) => {
 exports.createProfile = async (data) => {
   try {
     const query = `
-    INSERT INTO "profile" ("picture", "fullName", "phoneNumber", "gender", "profession", "nationality", "birthdate")
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    INSERT INTO "profile" ("picture", "fullName", "phoneNumber", "gender", "profession", "nationality", "birthdate", "userId")
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     RETURNING *
   `;
-    const values = [data.picture, data.fullName, data.phoneNumber, data.gender, data.profession, data.nationality, data.birthdate];
+    const values = [data.picture, data.fullName, data.phoneNumber, data.gender, data.profession, data.nationality, data.birthdate, data.userId];
     const { rows } = await db.query(query, values);
     return rows[0];
   } catch (err) {
@@ -50,7 +50,7 @@ SELECT * FROM "profile" WHERE "id" = $1
 exports.updateProfile = async (data, id) => {
   const query = `
   UPDATE "profile"
-  SET "picture" = COALESCE(NULLIF($1, ''), "picture"), "fullName" = COALESCE(NULLIF($2, ''), "fullName"), "phoneNumber" = COALESCE(NULLIF($3, ''), "phoneNumber"),"gender" = COALESCE(NULLIF($4, '')::BOOLEAN, "gender"), "profession" = COALESCE(NULLIF($5, ''), "profession"), "nationality" = COALESCE(NULLIF($6, ''), "nationality"), "birthdate" = COALESCE(NULLIF($7, '')::DATE, "birthdate")
+  SET "picture" = COALESCE(NULLIF($1, ''), "picture"), "fullName" = COALESCE(NULLIF($2, ''), "fullName"), "phoneNumber" = COALESCE(NULLIF($3, ''), "phoneNumber"),"gender" = COALESCE(NULLIF($4, '')::BOOLEAN, "gender"), "profession" = COALESCE(NULLIF($5, ''), "profession"), "nationality" = COALESCE(NULLIF($6, ''), "nationality"), "birthdate" = COALESCE(NULLIF($7, '')::DATE, "birthdate"), "userId" = COALESCE(NULLLIF($9, ''), "userId")
   WHERE "id" = $8 RETURNING *`;
 
   const value = [
@@ -62,6 +62,7 @@ exports.updateProfile = async (data, id) => {
     data.nationality,
     data.birthdate,
     id,
+    data.userId
   ];
   const { rows } = await db.query(query, value);
   return rows[0];

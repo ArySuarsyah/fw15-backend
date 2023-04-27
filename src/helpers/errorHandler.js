@@ -73,7 +73,7 @@ const errorHandler = (err, res) => {
     });
   }
 
-  if(err.message.includes(`invalid input syntax for type boolean:`)) {
+  if (err.message.includes(`invalid input syntax for type boolean:`)) {
     return res.status(400).json({
       succes: false,
       message: "Error: Invalid gender value",
@@ -86,12 +86,32 @@ const errorHandler = (err, res) => {
       message: "Error: Invalid birthdate value",
     });
   }
-    console.log(err.message);
+
+  if (err.message.includes("user not found!")) {
+    return res.status(400).json({
+      succes: false,
+      message: "Error: User not found",
+    });
+  }
+
+  if (err.message.includes("Forgot_Failed")) {
+    return res.status(400).json({
+      succes: false,
+      message: "Error: Request Failed",
+    });
+  }
+
+    if (err.message.includes("no_forgot_request")) {
+      return res.status(400).json({
+        succes: false,
+        message: "Error: Request not found",
+      });
+    }
+console.log(err);
   return res.status(500).json({
     succes: false,
     message: "Something happend in our backend",
   });
 };
-
 
 module.exports = errorHandler;

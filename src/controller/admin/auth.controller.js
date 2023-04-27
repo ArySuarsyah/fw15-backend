@@ -4,7 +4,10 @@ const jwt = require("jsonwebtoken");
 const errorHandler = require("../../helpers/errorHandler");
 const argon = require("argon2");
 const { SECRET_KEY } = process.env;
-const {getUserByEmail, insert} = require("../../models/users.model");
+const { getUserByEmail, insert, update } = require("../../models/users.model");
+const profileModel = require("../../models/profileModel");
+const forgotRequestModel = require("../../models/forgotRequestModel");
+const crypto = require("crypto");
 
 exports.login = async (req, res) => {
   try {
@@ -28,6 +31,8 @@ exports.login = async (req, res) => {
 
 exports.register = async (req, res) => {
   try {
+    const { fullName, password, confirmPassword } = req.body;
+
     if (password !== confirmPassword) {
       throw Error("Password unmatch");
     }
@@ -36,8 +41,15 @@ exports.register = async (req, res) => {
       ...req.body,
       password: hash,
     };
+
     const user = await insert(data);
     const token = jwt.sign({ id: user.id }, SECRET_KEY);
+    const profileData = {
+      fullName,
+      userId: user.id,
+    };
+
+    await profileModel.createProfile(profileData);
 
     return res.json({
       success: true,
@@ -49,34 +61,63 @@ exports.register = async (req, res) => {
   }
 };
 
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await getUserByEmail(email);
+console.log(user);
+    if (!user) {
+      throw Error("user not found!");
+    }
+    let randomCode = crypto.randomInt(100000, 999999);
 
+    const data = {
+      email: user.email,
+      code: randomCode,
+    };
+    const forgot = await forgotRequestModel.insert(data);
 
-// exports.resetPassword = (req, res) => {
-//   try {
-//     const { password, confirmPassword, email, code } = req.body;
-//     if (password === confirmPassword) {
-//       const data = resetPasswordModels.getResetPasswordVerify(email, code);
-//       if (data.length) {
-//         const [requestReset] = data;
+    if (!forgot) {
+      throw Error("Forgot_Failed");
+    }
 
-//         if (new Date(requestReset.createdAt).getTime() + 1 * 60 * 100 < new Date().getTime) {
-//           throw Error('code_expired!')
-//         }
-//         const users = await updatePassword(requestReset.userId, { password })
-//         if (users.length) {
-//             resetPasswordModel.deletePassword(requestReset.id, (err, { rows }) => {
-//               if (reqResetId.length) {
-//                 return res.status(200).json({
-//                   succes: true,
-//                   message: 'password updated'
-//                 })
-//               }
-//             })
-//           } else {
-//           return errorHandler(err, res);
-//           }
-//     }
-//     } else {
-//       throw Error('Password not match')
-//   }
-// }
+    res.status(200).json({
+      success: true,
+      message: "Request success",
+    });
+
+  } catch (err) {
+    return errorHandler(err, res);
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const { code, email, password } = req.body;
+    const find = await forgotRequestModel.getRequestByEmailAndCode(code, email);
+
+    console.log(find);
+    if (!find) {
+      throw Error("no_forgot_request");
+    }
+
+    const userSelected = await getUserByEmail(email);
+    const data = {
+      password: await argon.hash(password),
+    };
+
+    const user = await update(data, userSelected.id);
+
+    await forgotRequestModel.delete(find.id);
+    if (!user) {
+      throw Error("no_forgot_request");
+    }
+    return res.json({
+      success: true,
+      message: "Reset password success",
+    });
+  } catch (err) {
+    return errorHandler(err, res);
+  }
+};
+

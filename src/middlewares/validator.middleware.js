@@ -95,9 +95,6 @@ const eventFormat = {
     .withMessage("Please Insert min 5 character"),
 };
 
-
-
-
 // Validator Update Format
 
 const updateProfileFormat = {
@@ -186,25 +183,38 @@ const updateReservTicketFormat = {
 };
 
 const updateWishlistFormat = {
-  eventId: body("eventId").optional().isFloat().withMessage("Event Id is invalid"),
+  eventId: body("eventId")
+    .optional()
+    .isFloat()
+    .withMessage("Event Id is invalid"),
   userId: body("userId").optional().isNumeric().withMessage("User Id invalid"),
-  paramsId: idParamsFormat
+  paramsId: idParamsFormat,
 };
 
 const updateEventFormat = {
-  title: body("title").optional()
+  title: body("title")
+    .optional()
     .isAlpha()
     .withMessage("Title is invalid")
     .isLength()
     .withMessage("Title length is invalid"),
   date: body("date").optional().isDate().withMessage("Event date is invalid"),
-  cityId: body("cityId").optional().isNumeric().withMessage("City Id is invalid"),
-  description: body("description").optional()
+  cityId: body("cityId")
+    .optional()
+    .isNumeric()
+    .withMessage("City Id is invalid"),
+  description: body("description")
+    .optional()
     .isLength({ min: 5 })
     .withMessage("Please Insert min 5 character"),
-  idParamas: idParamsFormat
+  idParamas: idParamsFormat,
 };
 
+const resetPassword = body("confirmPassword").custom((value, { req }) => {
+
+return value === req.body.password
+
+}).withMessage("Password and confirm password not match!")
 
 
 
@@ -235,7 +245,8 @@ const rules = {
   creatWishlist: Object.values(wishlistFormat),
   updateWishlist: Object.values(updateWishlistFormat),
   createEvent: Object.values(eventFormat),
-  updateEven: Object.values(updateEventFormat),
+  updateEvent: Object.values(updateEventFormat),
+  resetPassword: resetPassword,
 };
 
 const validator = (req, res, next) => {
