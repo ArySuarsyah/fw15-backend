@@ -1,7 +1,7 @@
 const profileRouter = require("express").Router();
-const profileController = require("../controller/profileController");
-const validate = require("../middlewares/validator.middleware");
-const uploadMiddleware = require("../middlewares/upload.middlewares");
+const profileController = require("../../controller/profileController");
+const validate = require("../../middlewares/validator.middleware");
+const uploadMiddleware = require("../../middlewares/upload.middlewares");
 
 profileRouter.get("/", profileController.getProfile);
 profileRouter.post(

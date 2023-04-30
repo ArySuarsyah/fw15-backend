@@ -19,6 +19,7 @@ exports.login = async (req, res) => {
       throw Error("wrong_credentials");
     }
     const token = jwt.sign({ id: user.id }, SECRET_KEY);
+    console.log(user.id);
     return res.json({
       success: true,
       message: "Login Success!",
@@ -43,13 +44,14 @@ exports.register = async (req, res) => {
     };
 
     const user = await insert(data);
-    const token = jwt.sign({ id: user.id }, SECRET_KEY);
     const profileData = {
       fullName,
       userId: user.id,
     };
+    console.log(user.id);
 
     await profileModel.createProfile(profileData);
+    const token = jwt.sign({ id: user.id }, SECRET_KEY);
 
     return res.json({
       success: true,

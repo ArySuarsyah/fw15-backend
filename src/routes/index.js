@@ -3,7 +3,7 @@ const authMiddleware = require("../middlewares/auth.middleware");
 const router = require("express").Router();
 
 router.use("/auth", require("./auth.router"));
-router.use("/profile", require("./profileRouter"));
+router.use("/profile", require("./admin/profileRouter"));
 router.use("/events", require("./events/event.routes"));
 router.use("/eventsCategories", require("./eventsCategoriesRouter"));
 router.use("/cities", require("./citiesRouter"));
@@ -15,6 +15,8 @@ router.use("/reservationStatus", require("./reservationStatusRouter"));
 router.use("/reservationTicket", require("./reservationTicketRouter"));
 router.use("/wishlist", require("./wishlistRouter"));
 router.use("/categories", require("./categoriesRouter"));
+router.use("/updateProfile", require("./profile.router"));
+
 
 
 
