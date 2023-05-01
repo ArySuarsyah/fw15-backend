@@ -11,10 +11,10 @@ profileRouter.post(
   profileController.updateProfileByUserId
 );
 
-// profileRouter.get(
-//   "/profile-detail",
-//   authMiddleware, profileController.getProfileByUserId
-// );
+profileRouter.get(
+  "/profile-detail",
+  authMiddleware, profileController.readProfile
+);
 
 
 module.exports = profileRouter;

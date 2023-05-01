@@ -130,22 +130,21 @@ exports.updateProfileByUserId = async (req, res) => {
   }
 };
 
-// exports.getProfileByUserId = async (req, res) => {
-//   try {
+exports.readProfile = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const profile = await profileModels.getProfileByUserId(id);
 
-//     const { id } = req.user
-//     const profile = await profileModels.getProfileByUserId(id)
-//     console.log(profile);
-//   if (!profile) {
-//     throw Error("User not found");
-//   }
+    if (!profile) {
+      throw Error("User not found");
+    }
 
-//   return res.json({
-//     success: true,
-//     message: 'Profile',
-//     results: profile
-//   })
-//   } catch (err) {
-//     return errorHandler(err, res)
-//   }
-// }
+    return res.json({
+      success: true,
+      message: "Profile",
+      results: profile,
+    });
+  } catch (err) {
+    return errorHandler(err, res);
+  }
+};

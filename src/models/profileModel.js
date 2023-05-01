@@ -55,6 +55,7 @@ SELECT * FROM "profile" WHERE "id" = $1
 exports.getProfileByUserId = async (userId) => {
   const query = `
 SELECT
+"u"."id",
 "p"."fullName",
 "p"."picture",
 "u"."userName",
