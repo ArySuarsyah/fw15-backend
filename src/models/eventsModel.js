@@ -2,6 +2,7 @@ const db = require("../helpers/db.helper");
 
 exports.getEvents = async (filter) => {
   try {
+    console.log(filter);
     const query = `
     SELECT * FROM "events"
     WHERE "title" LIKE $3
@@ -9,7 +10,7 @@ exports.getEvents = async (filter) => {
     LIMIT $1
     OFFSET $2
   `;
-    const values = [filter.limit, filter.offset, `%${filter.search}%`];
+    const values = [filter.limit, filter.page, `%${filter.search}%`];
     const { rows } = await db.query(query, values);
     return rows;
   } catch (err) {

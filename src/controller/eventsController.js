@@ -6,8 +6,9 @@ const filterData = require("../helpers/filter.helper");
 exports.getEvents = async (req, res) => {
   try {
     const filter = filterData(req.query);
+
     const data = await eventModel.getEvents(filter);
-    console.log(data);
+
     return res.status(200).json({
       success: false,
       message: "List all Events",
@@ -21,7 +22,7 @@ exports.getEvents = async (req, res) => {
 exports.createEvents = async (req, res) => {
   try {
     if (req.file) {
-      req.body.picture = req.file.createEventfilename;
+      req.body.picture = req.file.filename;
     }
     const event = await eventModel.createEvents(req.body);
     return res.json({

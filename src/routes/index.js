@@ -4,7 +4,7 @@ const router = require("express").Router();
 
 router.use("/auth", require("./auth.router"));
 router.use("/profile", require("./admin/profileRouter"));
-router.use("/events", require("./events/event.routes"));
+router.use("/events", require("./events/eventsRouter"));
 router.use("/eventsCategories", require("./eventsCategoriesRouter"));
 router.use("/cities", require("./citiesRouter"));
 router.use("/partners", require("./partnersRouter"));

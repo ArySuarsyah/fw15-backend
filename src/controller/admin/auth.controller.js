@@ -19,7 +19,7 @@ exports.login = async (req, res) => {
       throw Error("wrong_credentials");
     }
     const token = jwt.sign({ id: user.id }, SECRET_KEY);
-    console.log(user.id);
+
     return res.json({
       success: true,
       message: "Login Success!",
@@ -48,8 +48,8 @@ exports.register = async (req, res) => {
       fullName,
       userId: user.id,
     };
-    console.log(user.id);
 
+console.log(profileData);
     await profileModel.createProfile(profileData);
     const token = jwt.sign({ id: user.id }, SECRET_KEY);
 
@@ -67,7 +67,7 @@ exports.forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
     const user = await getUserByEmail(email);
-console.log(user);
+
     if (!user) {
       throw Error("user not found!");
     }
@@ -98,7 +98,7 @@ exports.resetPassword = async (req, res) => {
     const { code, email, password } = req.body;
     const find = await forgotRequestModel.getRequestByEmailAndCode(code, email);
 
-    console.log(find);
+
     if (!find) {
       throw Error("no_forgot_request");
     }

@@ -84,11 +84,9 @@ const wishlistFormat = {
 
 const eventFormat = {
   title: body("title")
-    .isAlpha()
-    .withMessage("Title is invalid")
-    .isLength()
+    .isLength(minMaxValue)
     .withMessage("Title length is invalid"),
-  date: body("date").isDate().withMessage("Event date is invalid"),
+  // date: body("date").isDate({format: YYYY-MM-DD}).withMessage("Event date is invalid"),
   cityId: body("cityId").isNumeric().withMessage("City Id is invalid"),
   description: body("description")
     .isLength({ min: 5 })
