@@ -35,8 +35,6 @@ const fullNameFormat = body("fullName")
 const idParamsFormat = param("id").isFloat().withMessage("Id is invalid");
 
 const name = body("name")
-  .isAlpha()
-  .withMessage("Name is invalid")
   .isLength(minMaxValue)
   .withMessage("Min length 3, max length 100");
 
