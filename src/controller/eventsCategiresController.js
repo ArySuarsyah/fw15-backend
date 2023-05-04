@@ -5,7 +5,6 @@ const filterData = require("../helpers/filter.helper");
 
 exports.getEventsCategories = async (req, res) => {
   try {
-    console.log("ok");
     const filter = filterData(req.query);
     const data = await eventCategoriesModel.getEventsCategories(filter);
     return res.status(200).json({

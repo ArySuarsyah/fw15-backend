@@ -103,7 +103,6 @@ exports.deleteEvents = async (req, res) => {
 
 exports.getAllEvents = async (req, res) => {
   try {
-    console.log();
     const filter = {
       limit: parseInt(req.query.limit) || 5,
       page: (parseInt(req.query.page) - 0) * req.query.limit || 0,
@@ -124,6 +123,7 @@ exports.getAllEvents = async (req, res) => {
     return errorHandler(err, res);
   }
 };
+
 
 exports.insertEvent = async (req, res) => {
   try {
@@ -157,7 +157,9 @@ exports.insertEvent = async (req, res) => {
   }
 };
 
+
 exports.updateEv = async (req, res) => {
+  try {
   const { id } = req.params;
   const event = await eventCategoriesModels.findOneById(id);
   const { categoryId } = req.body;
@@ -172,7 +174,6 @@ exports.updateEv = async (req, res) => {
     data.picture = req.file.filename;
   }
   const eventData = await eventModel.updateEvents(data, id);
-console.log(data.picture);
 
   const ecData = {
     categoryId,
@@ -187,4 +188,7 @@ console.log(data.picture);
     message: "Update Event Successfully",
     results: eventResults,
   });
+  } catch (err) {
+    return errorHandler(err, res)
+  }
 };

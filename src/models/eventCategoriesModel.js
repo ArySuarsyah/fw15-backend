@@ -93,7 +93,6 @@ exports.findAllByEventId = async (filter) => {
     OFFSET $2
   `;
 
-    console.log(filter);
     const values = [
       filter.limit,
       filter.page,
@@ -103,7 +102,6 @@ exports.findAllByEventId = async (filter) => {
     ];
 
     const { rows } = await db.query(query, values);
-    console.log(rows);
     return rows;
   } catch (err) {
     if (err) throw err;
@@ -145,7 +143,6 @@ exports.findOneById = async (id) => {
     const values = [id];
 
     const { rows } = await db.query(query, values);
-    console.log(id);
     return rows[0];
   } catch (err) {
     if (err) throw err;
@@ -155,13 +152,18 @@ exports.findOneById = async (id) => {
 
 
 exports.updateEvntCategories = async (data, id) => {
+  try {
+
   const query = `
   UPDATE "eventCategories"
   SET "eventId" = COALESCE(NULLIF($1, '')::INTEGER, "eventId"), "categoryId" = COALESCE(NULLIF($2, '')::INTEGER, "categoryId")
-  
+
   WHERE "eventId" = $3 RETURNING *`;
 
   const value = [data.eventId, data.categoryId, id];
   const { rows } = await db.query(query, value);
   return rows[0];
+  } catch (err) {
+    if (err) throw err;
+  }
 };

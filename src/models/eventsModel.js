@@ -1,5 +1,6 @@
 const db = require("../helpers/db.helper");
 
+
 exports.getEvents = async (filter) => {
   try {
     const query = `
@@ -50,7 +51,8 @@ SELECT * FROM "events" WHERE "id" = $1
 };
 
 exports.updateEvents = async (data, id) => {
-  const query = `
+  try {
+    const query = `
   UPDATE "events"
   SET "picture" = COALESCE(NULLIF($1, ''), "picture"), "title" = COALESCE(NULLIF($2, ''), "title"), "cityId" = COALESCE(NULLIF($3, '')::INTEGER, "cityId"),"date" = COALESCE(NULLIF($4, '')::DATE, "date"), "description" = COALESCE(NULLIF($5, ''), "description")
   WHERE "id" = $6 RETURNING *`;
@@ -65,15 +67,22 @@ exports.updateEvents = async (data, id) => {
   ];
   const { rows } = await db.query(query, value);
   return rows[0];
+  } catch (err) {
+    if (err) throw err;
+  }
 };
 
 exports.deleteEvents = async (id) => {
-  const query = `
+  try {
+    const query = `
   DELETE FROM "events"
   WHERE id = $1 RETURNING *
   `;
-  const { rows } = await db.query(query, [id]);
-  return rows[0];
+    const { rows } = await db.query(query, [id]);
+    return rows[0];
+  } catch (err) {
+    if (err) throw err;
+  }
 };
 
 // Main Business Flow
@@ -104,7 +113,6 @@ WHERE "ec"."eventId" = 12
       `%${filter.searchByLocation}%`,
     ];
     const { rows } = await db.query(query, values);
-    console.log(rows);
     return rows;
   } catch (err) {
     if (err) throw err;
@@ -120,7 +128,7 @@ exports.insertEvent = async (data) => {
     VALUES ($1, $2, $3, $4, $5)
     RETURNING *
   `;
-    console.log(data);
+    
     const values = [
       data.picture,
       data.title,
