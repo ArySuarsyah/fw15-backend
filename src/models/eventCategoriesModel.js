@@ -23,10 +23,7 @@ exports.createEventsCategories = async (data) => {
     VALUES ($1, $2)
     RETURNING *
   `;
-    const values = [
-      data.eventId,
-      data.categoryId,
-    ];
+    const values = [data.eventId, data.categoryId];
     const { rows } = await db.query(query, values);
     return rows[0];
   } catch (err) {
@@ -51,11 +48,7 @@ exports.updateEventsCategories = async (data, id) => {
   SET "eventId" = COALESCE(NULLIF($1, '')::INTEGER, "eventId"), "categoryId" = COALESCE(NULLIF($2, '')::INTEGER, "categoryId")
   WHERE "id" = $3 RETURNING *`;
 
-  const value = [
-    data.eventId,
-    data.categoryId,
-    id,
-  ];
+  const value = [data.eventId, data.categoryId, id];
   const { rows } = await db.query(query, value);
   return rows[0];
 };
@@ -66,5 +59,109 @@ exports.deleteEventsCategories = async (id) => {
   WHERE id = $1 RETURNING *
   `;
   const { rows } = await db.query(query, [id]);
+  return rows[0];
+};
+
+
+
+
+
+
+
+
+
+// Main Business Flow
+
+exports.findAllByEventId = async (filter) => {
+  try {
+    const query = `
+    SELECT
+    "e"."id",
+    "e"."picture",
+    "e"."title",
+    "e"."date", "ct"."name" as "location", "cat"."name" as "category"
+    FROM "eventCategories" "ec"
+    JOIN "events" "e" ON "e"."id" = "ec"."eventId"
+    JOIN "cities" "ct" ON "ct"."id" = "e"."cityId"
+    JOIN "categories" "cat" ON "cat"."id" = "ec"."categoryId"
+    WHERE "e"."title" LIKE $3
+    AND "cat"."name" LIKE $4
+    AND "ct"."name" LIKE $5
+
+    ORDER BY "${filter.sort}" ${filter.sortBy}
+    LIMIT $1
+    OFFSET $2
+  `;
+
+    console.log(filter);
+    const values = [
+      filter.limit,
+      filter.page,
+      `%${filter.searchByName}%`,
+      `%${filter.searchByCategory}%`,
+      `%${filter.searchByLocation}%`,
+    ];
+
+    const { rows } = await db.query(query, values);
+    console.log(rows);
+    return rows;
+  } catch (err) {
+    if (err) throw err;
+  }
+};
+
+exports.insertEventsCategories = async (data) => {
+  try {
+    const query = `
+    INSERT INTO "eventCategories" ("eventId", "categoryId")
+    VALUES ($1, $2)
+    RETURNING *
+  `;
+    const values = [data.eventId, data.categoryId];
+    const { rows } = await db.query(query, values);
+    return rows[0];
+  } catch (err) {
+    if (err) throw err;
+  }
+};
+
+exports.findOneById = async (id) => {
+  try {
+    const query = `
+    SELECT
+    "e"."id",
+    "e"."picture",
+    "e"."title",
+    "ct"."name" as "location",
+    "cat"."name" as "category",
+    "e"."date"
+    FROM "eventCategories" "ec"
+    JOIN "events" "e" ON "e"."id" = "ec"."eventId"
+    JOIN "cities" "ct" ON "ct"."id" = "e"."cityId"
+    JOIN "categories" "cat" ON "cat"."id" = "ec"."categoryId"
+    WHERE "ec"."eventId" = $1
+  `;
+
+    const values = [id];
+
+    const { rows } = await db.query(query, values);
+    console.log(id);
+    return rows[0];
+  } catch (err) {
+    if (err) throw err;
+  }
+};
+
+
+
+exports.updateEvntCategories = async (data, id) => {
+  const query = `
+  UPDATE "eventCategories"
+  SET "eventId" = COALESCE(NULLIF($1, '')::INTEGER, "eventId"), "categoryId" = COALESCE(NULLIF($2, '')::INTEGER, "categoryId")
+  
+  WHERE "eventId" = $3 RETURNING *`;
+
+  const value = [data.eventId, data.categoryId, id];
+  const { rows } = await db.query(query, value);
   return rows[0];
 };

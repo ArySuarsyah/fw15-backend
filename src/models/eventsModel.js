@@ -2,7 +2,6 @@ const db = require("../helpers/db.helper");
 
 exports.getEvents = async (filter) => {
   try {
-    console.log(filter);
     const query = `
     SELECT * FROM "events"
     WHERE "title" LIKE $3
@@ -75,4 +74,63 @@ exports.deleteEvents = async (id) => {
   `;
   const { rows } = await db.query(query, [id]);
   return rows[0];
+};
+
+// Main Business Flow
+
+exports.findEvent = async (filter) => {
+  try {
+    const query = `
+SELECT
+"e"."id",
+"e"."picture",
+"e"."title",
+"e"."date", "ct"."name" as "location", "cat"."name" as "category"
+FROM "eventCategories" "ec"
+    JOIN "events" "e" ON "e"."id" = "ec"."eventId"
+    JOIN "cities" "ct" ON "ct"."id" = "e"."cityId"
+    JOIN "categories" "cat" ON "cat"."id" = "ec"."categoryId"
+WHERE "ec"."eventId" = 12
+    WHERE "ev". "title" LIKE $3 AND "cat"."name" LIKE $4 AND "ct"."name" LIKE $5
+    ORDER BY "${filter.sort}" ${filter.sortBy}
+    LIMIT $1
+    OFFSET $2
+  `;
+    const values = [
+      filter.limit,
+      filter.page,
+      `%${filter.searchByName}%`,
+      `%${filter.searchByCategory}%`,
+      `%${filter.searchByLocation}%`,
+    ];
+    const { rows } = await db.query(query, values);
+    console.log(rows);
+    return rows;
+  } catch (err) {
+    if (err) throw err;
+  }
+};
+
+
+
+exports.insertEvent = async (data) => {
+  try {
+    const query = `
+    INSERT INTO "events" ("picture", "title", "cityId", "date", "description")
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING *
+  `;
+    console.log(data);
+    const values = [
+      data.picture,
+      data.title,
+      data.cityId,
+      data.date,
+      data.description,
+    ];
+    const { rows } = await db.query(query, values);
+    return rows[0];
+  } catch (err) {
+    if (err) throw err;
+  }
 };

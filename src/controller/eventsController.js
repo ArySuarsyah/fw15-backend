@@ -2,6 +2,7 @@ const eventModel = require("../models/eventsModel");
 const fileRemover = require("../helpers/fileRemover");
 const errorHandler = require("../helpers/errorHandler");
 const filterData = require("../helpers/filter.helper");
+const eventCategoriesModels = require("../models/eventCategoriesModel");
 
 exports.getEvents = async (req, res) => {
   try {
@@ -96,4 +97,94 @@ exports.deleteEvents = async (req, res) => {
   } catch (err) {
     return errorHandler(err, res);
   }
+};
+
+// Main Business Flow
+
+exports.getAllEvents = async (req, res) => {
+  try {
+    console.log();
+    const filter = {
+      limit: parseInt(req.query.limit) || 5,
+      page: (parseInt(req.query.page) - 0) * req.query.limit || 0,
+      searchByName: req.query.searchByName || "",
+      searchByCategory: req.query.searchByCategory || "",
+      searchByLocation: req.query.searchByLocation || "",
+      sort: req.query.sort || "id",
+      sortBy: req.query.sortBy || "ASC",
+    };
+
+    const data = await eventCategoriesModels.findAllByEventId(filter);
+    return res.status(200).json({
+      success: true,
+      message: "List all Events",
+      results: data,
+    });
+  } catch (err) {
+    return errorHandler(err, res);
+  }
+};
+
+exports.insertEvent = async (req, res) => {
+  try {
+    const { categoryId } = req.body;
+
+    const data = {
+      ...req.body,
+    };
+    if (req.file) {
+      data.picture = req.file.filename;
+    }
+
+    const eventData = await eventModel.insertEvent(data);
+    const ecData = {
+      eventId: eventData.id,
+      categoryId,
+    };
+
+    await eventCategoriesModels.insertEventsCategories(ecData);
+
+    const event = await eventCategoriesModels.findOneById(eventData.id);
+
+    return res.json({
+      success: true,
+      message: `Create Events ${req.body.title} successfully`,
+      results: event,
+    });
+  } catch (err) {
+    fileRemover(req.file);
+    return errorHandler(err, res);
+  }
+};
+
+exports.updateEv = async (req, res) => {
+  const { id } = req.params;
+  const event = await eventCategoriesModels.findOneById(id);
+  const { categoryId } = req.body;
+  const data = {
+    ...req.body,
+  };
+
+  if (req.file) {
+    if (event.picture) {
+      fileRemover({ filename: event.picture });
+    }
+    data.picture = req.file.filename;
+  }
+  const eventData = await eventModel.updateEvents(data, id);
+console.log(data.picture);
+
+  const ecData = {
+    categoryId,
+  };
+
+  await eventCategoriesModels.updateEvntCategories(ecData, id);
+
+  const eventResults = await eventCategoriesModels.findOneById(eventData.id);
+
+  return res.json({
+    success: true,
+    message: "Update Event Successfully",
+    results: eventResults,
+  });
 };
