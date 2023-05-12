@@ -22,6 +22,11 @@ router.use("/updateProfile", require("./profile.router"));
 
 router.use("/events", require("./mainBusinessFlow/eventRouter"));
 router.use("/payment", require("./mainBusinessFlow/paymentRouter"));
+router.use(
+  "/history",
+  authMiddleware, require("./mainBusinessFlow/historyRouter")
+);
+
 
 
 router.use("*", (req, res) => {

@@ -20,11 +20,11 @@ exports.getReservationSection = async (filter) => {
 exports.createReservationSection = async (data) => {
   try {
     const query = `
-    INSERT INTO "reservationSection" ("name", "price")
-    VALUES ($1, $2)
+    INSERT INTO "reservationSection" ("name", "quantity", "price")
+    VALUES ($1, $2, $3)
     RETURNING *
   `;
-    const values = [data.name, data.price];
+    const values = [data.name, data.quantity, data.price];
     const { rows } = await db.query(query, values);
     return rows[0];
   } catch (err) {

@@ -6,5 +6,11 @@ const paymentController = require("../../controller/paymentController");
 
 paymentRouter.get('/', paymentController.getPayment);
 
+paymentRouter.get("/find", paymentController.getPayment);
+
+paymentRouter.post("/create", paymentController.createPayment);
+
+paymentRouter.post("/create-alternative", paymentController.createAlternative);
+
 
 module.exports = paymentRouter;

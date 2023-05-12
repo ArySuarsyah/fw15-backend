@@ -23,7 +23,12 @@ exports.createReservations = async (data) => {
     VALUES ($1, $2, $3, $4)
     RETURNING *
   `;
-    const values = [data.eventId, data.userId, data.statusId, data.paymentMethodId];
+    const values = [
+      data.eventId,
+      data.userId,
+      data.statusId,
+      data.paymentMethodId,
+    ];
     const { rows } = await db.query(query, values);
     return rows[0];
   } catch (err) {
@@ -48,7 +53,13 @@ exports.updateReservations = async (data, id) => {
   SET "eventId" = COALESCE(NULLIF($1, '')::INTEGER, "eventId"), "userId" = COALESCE(NULLIF($2, '')::INTEGER, "userId"), "statusId" = COALESCE(NULLIF($3, '')::INTEGER, "statusId"), "paymentMethodId" = COALESCE(NULLIF($4, '')::INTEGER  , "paymentMethodId")
   WHERE "id" = $5 RETURNING *`;
 
-  const value = [data.eventId, data.userId, data.statusId, data.paymentMethodId, id];
+  const value = [
+    data.eventId,
+    data.userId,
+    data.statusId,
+    data.paymentMethodId,
+    id,
+  ];
   const { rows } = await db.query(query, value);
   return rows[0];
 };
@@ -62,29 +73,155 @@ exports.deleteReservations = async (id) => {
   return rows[0];
 };
 
-
-
 // Main Business Flow
 
-exports.findById = async (filter) => {
+exports.findByName = async (filter) => {
   try {
     const query = `
   SELECT
   "reserv"."id" as "reservationsId",
-  "pay".name as "paymentMethod"
+  "e"."title",
+  "reserv"."userId",
+  "reserv"."statusId",
+  "pay".name as "paymentMethod",
+  "reserv"."createdAt",
+  "reserv"."updatedAt"
   FROM "reservations" "reserv"
   JOIN "paymentMethod" "pay" on "reserv"."paymentMethodId" = "pay"."id"
+  JOIN "events" "e" on "reserv"."eventId" = "e"."id"
   WHERE "pay"."name" LIKE $3
     LIMIT $1
     OFFSET $2
   `;
 
-    console.log(filter);
-  const value = [filter.limit, filter.page, `%${filter.searchByPaymentMethod}%`,];
-  const { rows } = await db.query(query, value);
+    const value = [
+      filter.limit,
+      filter.page,
+      `%${filter.searchByPaymentMethod}%`,
+    ];
+    const { rows } = await db.query(query, value);
 
-  return rows;
+    return rows;
   } catch (err) {
-    if(err) throw err;
-}
-}
+    if (err) throw err;
+  }
+};
+
+exports.findById = async (id) => {
+  try {
+    const query = `
+  SELECT
+  "reserv"."id" as "reservationsId",
+  "e"."title",
+  "reserv"."userId",
+  "reserv"."statusId",
+  "pay".name as "paymentMethod",
+  "reserv"."createdAt",
+  "reserv"."updatedAt"
+  FROM "reservations" "reserv"
+  JOIN "paymentMethod" "pay" on "reserv"."paymentMethodId" = "pay"."id"
+  JOIN "events" "e" on "reserv"."eventId" = "e"."id"
+  WHERE "reserv"."id"= $1
+  `;
+
+    const value = [id];
+    const { rows } = await db.query(query, value);
+
+    return rows[0];
+  } catch (err) {
+    if (err) throw err;
+  }
+};
+
+exports.create = async (data) => {
+  try {
+    const query = `
+    INSERT INTO "reservations" ("eventId", "userId", "statusId", "paymentMethodId")
+    VALUES ($1, $2, $3, $4)
+    RETURNING *
+  `;
+    const values = [
+      data.eventId,
+      data.userId,
+      data.statusId,
+      data.paymentMethodId,
+    ];
+    const { rows } = await db.query(query, values);
+    return rows[0];
+  } catch (err) {
+    if (err) throw err;
+  }
+};
+
+
+
+// alternative reservation
+
+exports.findReservation = async (filter) => {
+  try {
+    const query = `
+  SELECT
+  "reserv"."id" as "reservationsId",
+  "e"."title",
+  "reserv"."userId",
+  "reserv"."statusId",
+  "pay".name as "paymentMethod",
+  "reserv"."createdAt",
+  "reserv"."updatedAt"
+  FROM "reservations" "reserv"
+  JOIN "paymentMethod" "pay" on "reserv"."paymentMethodId" = "pay"."id"
+  JOIN "events" "e" on "reserv"."eventId" = "e"."id"
+  JOIN "reservationTicket" "ticket" on "reserv"."eventId" = "ticket"."reservationId"
+  JOIN "reservationSection" "section" on "ticket"."sectionId" = "section"."id"
+  WHERE "pay"."name" LIKE $3
+    LIMIT $1
+    OFFSET $2
+  `;
+
+    const value = [
+      filter.limit,
+      filter.page,
+      `%${filter.searchByPaymentMethod}%`,
+    ];
+    const { rows } = await db.query(query, value);
+
+    return rows;
+  } catch (err) {
+    if (err) throw err;
+  }
+};
+
+
+
+exports.findByOne = async (id) => {
+  try {
+    const query = `
+SELECT
+    "reserv"."id" as "reservationsId",
+    "e"."title",
+    "reserv"."userId",
+    "status"."name" as "status",
+    "section"."name",
+    "section"."quantity",
+    "section"."price",
+    "pay"."name" as "paymentMethod",
+    "reserv"."createdAt",
+    "reserv"."updatedAt"
+FROM "reservations" "reserv"
+    JOIN "paymentMethod" "pay" on "reserv"."paymentMethodId" = "pay"."id"
+    JOIN "events" "e" on "reserv"."eventId" = "e"."id"
+    JOIN "reservationTicket" "ticket" on "reserv"."id" = "ticket"."reservationId"
+    JOIN "reservationSection" "section" on "ticket"."sectionId" = "section"."id"
+    JOIN "reservationStatus" "status" on "reserv"."statusId" = "status"."id"
+
+WHERE "reserv"."id" = $1
+  `;
+
+    const value = [id];
+    const { rows } = await db.query(query, value);
+
+    return rows[0];
+  } catch (err) {
+    if (err) throw err;
+  }
+};

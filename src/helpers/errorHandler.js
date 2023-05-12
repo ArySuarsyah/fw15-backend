@@ -107,6 +107,22 @@ const errorHandler = (err, res) => {
         message: "Error: Request not found",
       });
     }
+
+  if (err.message ==  "reservation not found!") {
+      return res.status(400).json({
+        succes: false,
+        message: "Error: Reservation not found",
+      });
+  }
+
+  if (err.message == "Nothing transaction!") {
+    return res.status(500).json({
+      succes: false,
+      message: "Error: Make a transaction first",
+    })
+  }
+
+
 console.log(err);
   return res.status(500).json({
     succes: false,
