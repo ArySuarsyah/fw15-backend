@@ -212,6 +212,12 @@ return value === req.body.password
 
 }).withMessage("Password and confirm password not match!")
 
+const changePassword = body("confirmNewPassword")
+  .custom((value, { req }) => {
+    return value === req.body.newPassword;
+  })
+  .withMessage("Password and confirm password not match!");
+
 
 
 
@@ -243,6 +249,7 @@ const rules = {
   createEvent: Object.values(eventFormat),
   updateEvent: Object.values(updateEventFormat),
   resetPassword: resetPassword,
+  changePassword: changePassword,
 };
 
 const validator = (req, res, next) => {

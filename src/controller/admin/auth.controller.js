@@ -6,6 +6,7 @@ const argon = require("argon2");
 const { SECRET_KEY } = process.env;
 const { getUserByEmail, insert, update } = require("../../models/users.model");
 const profileModel = require("../../models/profileModel");
+const userModel = require("../../models/users.model");
 const forgotRequestModel = require("../../models/forgotRequestModel");
 const crypto = require("crypto");
 
@@ -49,7 +50,6 @@ exports.register = async (req, res) => {
       userId: user.id,
     };
 
-console.log(profileData);
     await profileModel.createProfile(profileData);
     const token = jwt.sign({ id: user.id }, SECRET_KEY);
 
@@ -87,7 +87,6 @@ exports.forgotPassword = async (req, res) => {
       success: true,
       message: "Request success",
     });
-
   } catch (err) {
     return errorHandler(err, res);
   }
@@ -97,7 +96,6 @@ exports.resetPassword = async (req, res) => {
   try {
     const { code, email, password } = req.body;
     const find = await forgotRequestModel.getRequestByEmailAndCode(code, email);
-
 
     if (!find) {
       throw Error("no_forgot_request");
@@ -123,3 +121,37 @@ exports.resetPassword = async (req, res) => {
   }
 };
 
+exports.changePassword = async (req, res) => {
+  try {
+    const { id } = req.user;
+
+    if (!id) {
+      throw Error("id_not_found");
+    }
+
+    const { oldPassword, newPassword } = req.body;
+    const find = await userModel.getUserById(id);
+
+    if (!find) {
+      throw Error("Login first");
+    }
+
+    const verify = await argon.verify(find.password, oldPassword);
+    if (!verify) {
+      throw Error("wrong_credentials");
+    }
+
+    const data = {
+      password: await argon.hash(newPassword),
+    };
+
+    await update(data, id);
+
+    return res.json({
+      success: true,
+      message: "Reset password success",
+    });
+  } catch (err) {
+    return errorHandler(err, res);
+  }
+};
