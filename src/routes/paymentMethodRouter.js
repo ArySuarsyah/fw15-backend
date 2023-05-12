@@ -4,21 +4,24 @@ const uploadMiddleware = require("../middlewares/upload.middlewares");
 const validate = require("../middlewares/validator.middleware");
 
 paymentMethod.get("/", paymentMethodController.getPaymentMethod);
+
 paymentMethod.post(
-  "/",
-  uploadMiddleware("picture"), validate("nameFormat"),
+  "/create", validate("nameFormat"),
   paymentMethodController.createPaymentMethod
 );
+
 paymentMethod.get(
   "/:id",
   validate("paramsId"),
   paymentMethodController.getPaymentMethodById
 );
+
 paymentMethod.patch(
   "/:id",
   uploadMiddleware("picture"), validate("updateName"),
   paymentMethodController.updatePaymentMethod
 );
+
 paymentMethod.delete(
   "/:id",
   validate("paramsId"),

@@ -132,7 +132,8 @@ exports.findOneById = async (id) => {
     "e"."title",
     "ct"."name" as "location",
     "cat"."name" as "category",
-    "e"."date"
+    "e"."date",
+    "e"."description",
     FROM "eventCategories" "ec"
     JOIN "events" "e" ON "e"."id" = "ec"."eventId"
     JOIN "cities" "ct" ON "ct"."id" = "e"."cityId"

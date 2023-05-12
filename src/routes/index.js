@@ -8,7 +8,7 @@ router.use("/profile", require("./admin/profileRouter"));
 router.use("/eventsCategories", require("./eventsCategoriesRouter"));
 router.use("/cities", require("./citiesRouter"));
 router.use("/partners", require("./partnersRouter"));
-router.use("/payment", require("./paymentMethodRouter"));
+router.use("/paymentMethod", require("./paymentMethodRouter"));
 router.use("/reservation", require("./reservationsRouter"));
 router.use("/reservationSection", require("./reservationSectionRouter"));
 router.use("/reservationStatus", require("./reservationStatusRouter"));
@@ -21,6 +21,7 @@ router.use("/updateProfile", require("./profile.router"));
 // Main Business Flow
 
 router.use("/events", require("./mainBusinessFlow/eventRouter"));
+router.use("/payment", require("./mainBusinessFlow/paymentRouter"));
 
 
 router.use("*", (req, res) => {

@@ -5,7 +5,7 @@ const validate = require("../middlewares/validator.middleware");
 
 reservation.get("/", reservationController.getReservations);
 reservation.post(
-  "/",
+  "/create",
   validate("resevationCreate"),
   reservationController.createReservations
 );

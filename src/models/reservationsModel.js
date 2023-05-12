@@ -61,3 +61,30 @@ exports.deleteReservations = async (id) => {
   const { rows } = await db.query(query, [id]);
   return rows[0];
 };
+
+
+
+// Main Business Flow
+
+exports.findById = async (filter) => {
+  try {
+    const query = `
+  SELECT
+  "reserv"."id" as "reservationsId",
+  "pay".name as "paymentMethod"
+  FROM "reservations" "reserv"
+  JOIN "paymentMethod" "pay" on "reserv"."paymentMethodId" = "pay"."id"
+  WHERE "pay"."name" LIKE $3
+    LIMIT $1
+    OFFSET $2
+  `;
+
+    console.log(filter);
+  const value = [filter.limit, filter.page, `%${filter.searchByPaymentMethod}%`,];
+  const { rows } = await db.query(query, value);
+
+  return rows;
+  } catch (err) {
+    if(err) throw err;
+}
+}
