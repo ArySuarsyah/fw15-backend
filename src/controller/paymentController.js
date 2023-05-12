@@ -19,7 +19,7 @@ exports.getPayment = async (req, res) => {
       searchByPaymentMethod: req.query.searchByPaymentMethod || "",
     };
 
-    const data = await reservationsModel.findReservation(filter);
+    const data = await reservationsModel.findByName(filter);
     if (!data) {
       throw Error("Couldn't find reservation");
     }

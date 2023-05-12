@@ -73,6 +73,9 @@ exports.deleteReservations = async (id) => {
   return rows[0];
 };
 
+
+
+
 // Main Business Flow
 
 exports.findByName = async (filter) => {
@@ -94,6 +97,7 @@ exports.findByName = async (filter) => {
     OFFSET $2
   `;
 
+    console.log(filter);
     const value = [
       filter.limit,
       filter.page,
@@ -101,7 +105,7 @@ exports.findByName = async (filter) => {
     ];
     const { rows } = await db.query(query, value);
 
-    return rows;
+    return rows[0];
   } catch (err) {
     if (err) throw err;
   }
@@ -147,7 +151,7 @@ exports.create = async (data) => {
       data.paymentMethodId,
     ];
     const { rows } = await db.query(query, values);
-    return rows[0];
+    return rows;
   } catch (err) {
     if (err) throw err;
   }

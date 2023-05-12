@@ -16,7 +16,7 @@ exports.getHistory = async (req, res) => {
     }
 
     if (data.length <= 0) {
-      throw Error("Nothing transaction");
+      throw Error("Nothing transaction!");
     }
 
     return res.json({
