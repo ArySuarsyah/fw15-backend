@@ -122,6 +122,13 @@ const errorHandler = (err, res) => {
     })
   }
 
+  if (err.message == "Please insert a new password") {
+    return res.status(500).json({
+      succes: false,
+      message: "Error: Please insert a new password",
+    });
+  }
+
 
 console.log(err);
   return res.status(500).json({

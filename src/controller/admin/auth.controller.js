@@ -137,8 +137,14 @@ exports.changePassword = async (req, res) => {
     }
 
     const verify = await argon.verify(find.password, oldPassword);
+    const verifyNewPassword = await argon.verify(find.password, newPassword);
+
     if (!verify) {
       throw Error("wrong_credentials");
+    }
+
+    if (verifyNewPassword) {
+      throw Error("Please insert a new password");
     }
 
     const data = {
