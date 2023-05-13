@@ -40,16 +40,13 @@ exports.getPayment = async (req, res) => {
 
 exports.createPayment = async (req, res) => {
   try {
-    //  const { id } = req.user;
-    //  if (!id) {
-    //    throw Error("id_not_found");
-    //  }
+     const { id } = req.user;
+     if (!id) {
+       throw Error("id_not_found");
+     }
     const reservData = {
       ...req.body,
     };
-
-    // const reservationStatus =
-    //   await reservationsStatusModel.createReservationStatus(reservStatusData);
 
     const data = await reservationsModel.create(reservData);
 
