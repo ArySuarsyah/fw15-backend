@@ -7,6 +7,7 @@ const {
   forgotPassword,
   resetPassword,
   changePassword,
+  loginFingerPrint,
 } = require("../controller/admin/auth.controller");
 const authMiddleware = require("../middlewares/auth.middleware");
 
@@ -18,12 +19,15 @@ auth.post("/forgot-password", forgotPassword);
 
 auth.post("/reset-password", validate("resetPassword"), resetPassword);
 
-auth.post("/change-password", authMiddleware, validate("changePassword"), changePassword);
+auth.post(
+  "/change-password",
+  authMiddleware,
+  validate("changePassword"),
+  changePassword
+);
 
+auth.post("/loginFingerprint", loginFingerPrint);
 
 // auth.get("/getcode", getByEmailAndCode);
-
-
-
 
 module.exports = auth;
