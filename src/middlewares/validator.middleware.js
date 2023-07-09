@@ -29,7 +29,7 @@ const strongPassword = body("password")
   .withMessage("Must be 8 caracteres, 1 uppercase, 1 lowercase, 1 number.");
 
 const fullNameFormat = body("fullName")
-  .isAlpha()
+  .isLength(minMaxValue)
   .withMessage("Name is invalid!");
 
 const idParamsFormat = param("id").isFloat().withMessage("Id is invalid");
@@ -231,7 +231,7 @@ const rules = {
   paramsId: [idParamsFormat],
   nameFormat: [name],
   updateName: [name, idParamsFormat],
-  authRegister: [fullNameFormat, emailFormat, strongPassword],
+  authRegister: [emailFormat, strongPassword],
   createProfile: Object.values(createProfileFormat),
   updateProfile: Object.values(updateProfileFormat), //
   deleteProfile: [idParamsFormat],
