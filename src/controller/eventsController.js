@@ -2,7 +2,9 @@ const eventModel = require("../models/eventsModel");
 const fileRemover = require("../helpers/fileRemover");
 const errorHandler = require("../helpers/errorHandler");
 const filterData = require("../helpers/filter.helper");
+const admin = require("../helpers/firebase");
 const eventCategoriesModels = require("../models/eventCategoriesModel");
+const deviceTokenModel = require("../models/deviceTokenModel");
 
 exports.getEvents = async (req, res) => {
   try {
@@ -26,6 +28,18 @@ exports.createEvents = async (req, res) => {
       req.body.picture = req.file.filename;
     }
     const event = await eventModel.createEvents(req.body);
+
+    const listToken = await deviceTokenModel.getToken(1, 1000);
+    const message = listToken.map((item) => ({
+      token: item.token,
+      notification: {
+        title: "There is a new event",
+        body: `${req.body.title} will be held at ${req.body.date}, check it out!!`,
+      },
+    }));
+    const messaging = admin.messaging();
+    
+    messaging().sendEach(message);
     return res.json({
       success: true,
       message: `Create Events ${req.body.title} successfully`,
@@ -114,6 +128,7 @@ exports.getAllEvents = async (req, res) => {
     };
 
     const data = await eventCategoriesModels.findAllByEventId(filter);
+
     return res.status(200).json({
       success: true,
       message: "List all Events",
@@ -123,7 +138,6 @@ exports.getAllEvents = async (req, res) => {
     return errorHandler(err, res);
   }
 };
-
 
 exports.insertEvent = async (req, res) => {
   try {
@@ -157,38 +171,37 @@ exports.insertEvent = async (req, res) => {
   }
 };
 
-
 exports.updateEv = async (req, res) => {
   try {
-  const { id } = req.params;
-  const event = await eventCategoriesModels.findOneById(id);
-  const { categoryId } = req.body;
-  const data = {
-    ...req.body,
-  };
+    const { id } = req.params;
+    const event = await eventCategoriesModels.findOneById(id);
+    const { categoryId } = req.body;
+    const data = {
+      ...req.body,
+    };
 
-  if (req.file) {
-    if (event.picture) {
-      fileRemover({ filename: event.picture });
+    if (req.file) {
+      if (event.picture) {
+        fileRemover({ filename: event.picture });
+      }
+      data.picture = req.file.filename;
     }
-    data.picture = req.file.filename;
-  }
-  const eventData = await eventModel.updateEvents(data, id);
+    const eventData = await eventModel.updateEvents(data, id);
 
-  const ecData = {
-    categoryId,
-  };
+    const ecData = {
+      categoryId,
+    };
 
-  await eventCategoriesModels.updateEvntCategories(ecData, id);
+    await eventCategoriesModels.updateEvntCategories(ecData, id);
 
-  const eventResults = await eventCategoriesModels.findOneById(eventData.id);
+    const eventResults = await eventCategoriesModels.findOneById(eventData.id);
 
-  return res.json({
-    success: true,
-    message: "Update Event Successfully",
-    results: eventResults,
-  });
+    return res.json({
+      success: true,
+      message: "Update Event Successfully",
+      results: eventResults,
+    });
   } catch (err) {
-    return errorHandler(err, res)
+    return errorHandler(err, res);
   }
 };
