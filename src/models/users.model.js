@@ -80,3 +80,15 @@ exports.deleteUsers = async (id) => {
   const { rows } = await db.query(query, [id]);
   return rows[0];
 };
+
+
+exports.getUserByFingerprint = async (fingerprint) => {
+  const query = `
+SELECT * FROM "users" WHERE "fingerprint" = $1
+  `;
+
+  const value = [fingerprint];
+  const { rows } = await db.query(query, value);
+
+  return rows[0];
+};
