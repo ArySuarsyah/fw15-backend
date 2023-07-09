@@ -148,3 +148,35 @@ exports.readProfile = async (req, res) => {
     return errorHandler(err, res);
   }
 };
+
+
+
+exports.updateFingerprint = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const user = await profileModels.getProfileByUserId(id);
+    const data = {
+      ...req.body,
+    };
+
+    if (req.file) {
+      if (user.picture) {
+        fileRemover({ filename: user.picture });
+      }
+      data.picture = req.file.filename;
+    }
+
+    const profile = await profileModels.updateProfileByUserId(id, data);
+
+    if (!profile) {
+      throw Error("User not found");
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      results: profile,
+    });
+  } catch (err) {
+    return errorHandler(err, res);
+  }
+};
