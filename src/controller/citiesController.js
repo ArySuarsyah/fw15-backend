@@ -8,7 +8,7 @@ exports.getCities = async (req, res) => {
     const filter = filterData(req.query);
     const data = await citiesModel.getCities(filter);
     return res.status(200).json({
-      success: false,
+      success: true,
       message: "List all Cities",
       results: data,
     });
