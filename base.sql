@@ -6,8 +6,10 @@ CREATE TABLE
         "userName" VARCHAR(225),
         "email" VARCHAR(225) UNIQUE,
         "password" VARCHAR(225),
+        "fingerprint" VARCHAR(225) UNIQUE,
         "createdAt" TIMESTAMP DEFAULT NOW(),
-        "updatedAt" TIMESTAMP DEFAULT NULL
+        "updatedAt" TIMESTAMP DEFAULT NULL,
+
     );
 
 CREATE TABLE
