@@ -9,6 +9,7 @@ exports.getProfile = async (filter) => {
     LIMIT $1
     OFFSET $2
   `;
+
     const values = [filter.limit, filter.offset, `%${filter.search}%`];
     const { rows } = await db.query(query, values);
     return rows;
@@ -124,3 +125,25 @@ exports.deleteProfile = async (id) => {
   const { rows } = await db.query(query, [id]);
   return rows[0];
 };
+
+
+
+// exports.updateProfileByUserId = async (userId, data) => {
+//   const query = `
+//   UPDATE "profile"
+//   SET "fingerprin" = COALESCE(NULLIF($1, ''), "picture"), "fullName" = COALESCE(NULLIF($2, ''), "fullName"), "phoneNumber" = COALESCE(NULLIF($3, ''), "phoneNumber"),"gender" = COALESCE(NULLIF($4, '')::BOOLEAN, "gender"), "profession" = COALESCE(NULLIF($5, ''), "profession"), "nationality" = COALESCE(NULLIF($6, ''), "nationality"), "birthdate" = COALESCE(NULLIF($7, '')::DATE, "birthdate")
+//   WHERE "userId" = $8 RETURNING *`;
+
+//   const value = [
+//     data.picture,
+//     data.fullName,
+//     data.phoneNumber,
+//     data.gender,
+//     data.profession,
+//     data.nationality,
+//     data.birthdate,
+//     userId,
+//   ];
+//   const { rows } = await db.query(query, value);
+//   return rows[0];
+// };
