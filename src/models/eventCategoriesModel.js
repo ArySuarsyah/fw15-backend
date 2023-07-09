@@ -79,7 +79,9 @@ exports.findAllByEventId = async (filter) => {
     "e"."id",
     "e"."picture",
     "e"."title",
-    "e"."date", "ct"."name" as "location", "cat"."name" as "category"
+    "e"."date", "ct"."name" as "location",
+    "cat"."name" as "category",
+    "e"."description" as "description"
     FROM "eventCategories" "ec"
     JOIN "events" "e" ON "e"."id" = "ec"."eventId"
     JOIN "cities" "ct" ON "ct"."id" = "e"."cityId"
@@ -133,7 +135,7 @@ exports.findOneById = async (id) => {
     "ct"."name" as "location",
     "cat"."name" as "category",
     "e"."date",
-    "e"."description",
+    "e"."description"
     FROM "eventCategories" "ec"
     JOIN "events" "e" ON "e"."id" = "ec"."eventId"
     JOIN "cities" "ct" ON "ct"."id" = "e"."cityId"
@@ -164,6 +166,32 @@ exports.updateEvntCategories = async (data, id) => {
   const value = [data.eventId, data.categoryId, id];
   const { rows } = await db.query(query, value);
   return rows[0];
+  } catch (err) {
+    if (err) throw err;
+  }
+};
+
+
+exports.findOneForDelete = async (id) => {
+  try {
+    const query = `
+    SELECT
+    "e"."id",
+    "ct"."id" as city,
+    "cat"."id" as category,
+    "e"."date",
+    "e"."description"
+    FROM "eventCategories" "ec"
+    JOIN "events" "e" ON "e"."id" = "ec"."eventId"
+    JOIN "cities" "ct" ON "ct"."id" = "e"."cityId"
+    JOIN "categories" "cat" ON "cat"."id" = "ec"."categoryId"
+    WHERE "ec"."eventId" = $1
+  `;
+
+    const values = [id];
+
+    const { rows } = await db.query(query, values);
+    return rows[0];
   } catch (err) {
     if (err) throw err;
   }
