@@ -12,7 +12,7 @@ profileRouter.post(
 );
 
 profileRouter.get(
-  "/profile-detail",
+  "/:id",
   authMiddleware, profileController.readProfile
 );
 
