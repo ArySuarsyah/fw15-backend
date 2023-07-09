@@ -1,8 +1,11 @@
 /* eslint-disable no-undef */
+
+require("dotenv").config({
+  path: ".env",
+});
 const { Pool } = require("pg"); // untuk membuat koneksi pada database
 
-const connectionString =
-  "postgresql://postgres:1@localhost:5432/postgres?schema=public";
+const connectionString = process.env.DATABASE;
 
 const db = new Pool({
   connectionString,
