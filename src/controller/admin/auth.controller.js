@@ -161,3 +161,22 @@ exports.changePassword = async (req, res) => {
     return errorHandler(err, res);
   }
 };
+
+exports.loginFingerPrint = async (req, res) => {
+  try {
+    const { fingerprint } = req.body;
+    const user = await userModel.getUserByFingerprint(fingerprint);
+    if (!user) {
+      throw Error("Fingerprint not found");
+    }
+    const token = jwt.sign({ id: user.id }, SECRET_KEY);
+
+    return res.json({
+      success: true,
+      message: "Login Success!",
+      results: { token },
+    });
+  } catch (err) {
+    return errorHandler(err, res);
+  }
+};
