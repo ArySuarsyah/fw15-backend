@@ -97,7 +97,7 @@ exports.findByName = async (filter) => {
     OFFSET $2
   `;
 
-    console.log(filter);
+
     const value = [
       filter.limit,
       filter.page,
