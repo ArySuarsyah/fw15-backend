@@ -129,6 +129,12 @@ const errorHandler = (err, res) => {
     });
   }
 
+  if (err.message == "Fingerprint not found") {
+    return res.status(500).json({
+      succes: false,
+      message: "Error: Fingerprint not found",
+    });
+  }
 
 console.log(err);
   return res.status(500).json({
