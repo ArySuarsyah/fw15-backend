@@ -5,6 +5,8 @@ const historyController = require("../../controller/historyController");
 // const validate = require("../../middlewares/validator.middleware");
 
 historyRouter.get("/", historyController.getHistory);
+historyRouter.delete("/:id", historyController.deleteHistory);
+
 
 
 module.exports = historyRouter;
