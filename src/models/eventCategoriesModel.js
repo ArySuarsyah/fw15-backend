@@ -56,7 +56,7 @@ exports.updateEventsCategories = async (data, id) => {
 exports.deleteEventsCategories = async (id) => {
   const query = `
   DELETE FROM "eventCategories"
-  WHERE id = $1 RETURNING *
+  WHERE "eventId" = $1 RETURNING *
   `;
   const { rows } = await db.query(query, [id]);
   return rows[0];
