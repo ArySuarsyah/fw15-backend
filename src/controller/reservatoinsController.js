@@ -19,9 +19,6 @@ exports.getReservations = async (req, res) => {
 
 exports.createReservations = async (req, res) => {
   try {
-    if (req.file) {
-      req.body.picture = req.file.createEventfilename;
-    }
     const event = await reservationsModel.createReservations(req.body);
     return res.json({
       success: true,
