@@ -3,7 +3,9 @@ const profileController = require("../../controller/profileController");
 const validate = require("../../middlewares/validator.middleware");
 const uploadMiddleware = require("../../middlewares/upload.middlewares");
 
-profileRouter.get("/", profileController.getProfile);
+// profileRouter.get("/", profileController.getProfile);
+profileRouter.get("/", profileController.readProfile);
+
 profileRouter.post(
   "/",
   uploadMiddleware("picture"),
