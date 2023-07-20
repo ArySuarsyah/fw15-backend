@@ -207,13 +207,12 @@ const updateEventFormat = {
 };
 
 const resetPassword = body("confirmPassword").custom((value, { req }) => {
-
 return value === req.body.password
-
-}).withMessage("Password and confirm password not match!")
+}).withMessage(" confirm password not match!")
 
 const changePassword = body("confirmNewPassword")
   .custom((value, { req }) => {
+
     return value === req.body.newPassword;
   })
   .withMessage("Password and confirm password not match!");
