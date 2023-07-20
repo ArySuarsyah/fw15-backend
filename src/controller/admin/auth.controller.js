@@ -86,6 +86,7 @@ exports.forgotPassword = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Request success",
+      results: forgot,
     });
   } catch (err) {
     return errorHandler(err, res);
@@ -131,7 +132,6 @@ exports.changePassword = async (req, res) => {
 
     const { oldPassword, newPassword } = req.body;
     const find = await userModel.getUserById(id);
-
     if (!find) {
       throw Error("Login first");
     }
@@ -155,7 +155,7 @@ exports.changePassword = async (req, res) => {
 
     return res.json({
       success: true,
-      message: "Reset password success",
+      message: "Change password success",
     });
   } catch (err) {
     return errorHandler(err, res);
