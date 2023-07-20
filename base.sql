@@ -128,3 +128,13 @@ CREATE TABLE
         "createdAt" TIMESTAMP DEFAULT NOW(),
         "updatedAt" TIMESTAMP DEFAULT NULL
     );
+
+CREATE TABLE
+    "deviceToken"(
+        "id" int NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+        "token" VARCHAR(225),
+        "userId" int,
+        "eventCreationNotif" BOOLEAN DEFAULT TRUE,
+        "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        "updatedAt" TIMESTAMP
+    )
