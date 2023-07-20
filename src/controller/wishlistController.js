@@ -1,4 +1,4 @@
-const wishlistModel = require('../models/wishlistModel')
+const wishlistModel = require("../models/wishlistModel");
 const fileRemover = require("../helpers/fileRemover");
 const errorHandler = require("../helpers/errorHandler");
 const filterData = require("../helpers/filter.helper");
@@ -19,9 +19,7 @@ exports.getWishlist = async (req, res) => {
 
 exports.createWishlist = async (req, res) => {
   try {
-    if (req.file) {
-      req.body.picture = req.file.createEventfilename;
-    }
+
     const event = await wishlistModel.createWishlist(req.body);
     return res.json({
       success: true,
@@ -59,10 +57,7 @@ exports.updateWishlist = async (req, res) => {
     const data = {
       ...req.body,
     };
-    const eventData = await wishlistModel.updateWishlist(
-      data,
-      req.params.id
-    );
+    const eventData = await wishlistModel.updateWishlist(data, req.params.id);
     if (eventData) {
       return res.json({
         success: true,
