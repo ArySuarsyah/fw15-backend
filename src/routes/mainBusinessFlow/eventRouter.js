@@ -18,6 +18,11 @@ eventRouter.patch(
   eventsController.updateEv
 );
 
+eventRouter.delete(
+  "/manage/delete/:id",
+  eventsController.deleteEvent
+);
+
 // eventRouter.post(
 //   "/",
 //   uploadMiddleware("picture"),
