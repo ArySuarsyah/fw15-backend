@@ -37,8 +37,8 @@ exports.createEvents = async (req, res) => {
         body: `${req.body.title} will be held at ${req.body.date}, check it out!!`,
       },
     }));
-    const messaging = admin.messaging();
-    
+    const messaging = admin.messaging;
+
     messaging().sendEach(message);
     return res.json({
       success: true,
@@ -118,7 +118,7 @@ exports.deleteEvents = async (req, res) => {
 exports.getAllEvents = async (req, res) => {
   try {
     const filter = {
-      limit: parseInt(req.query.limit) || 5,
+      limit: parseInt(req.query.limit) || 10,
       page: (parseInt(req.query.page) - 0) * req.query.limit || 0,
       searchByName: req.query.searchByName || "",
       searchByCategory: req.query.searchByCategory || "",
@@ -150,6 +150,7 @@ exports.insertEvent = async (req, res) => {
       data.picture = req.file.filename;
     }
 
+
     const eventData = await eventModel.insertEvent(data);
     const ecData = {
       eventId: eventData.id,
@@ -179,7 +180,6 @@ exports.updateEv = async (req, res) => {
     const data = {
       ...req.body,
     };
-
     if (req.file) {
       if (event.picture) {
         fileRemover({ filename: event.picture });
@@ -202,6 +202,23 @@ exports.updateEv = async (req, res) => {
       results: eventResults,
     });
   } catch (err) {
+    return errorHandler(err, res);
+  }
+};
+
+
+exports.deleteEvent = async (req, res) => {
+  try {
+
+    await eventModel.deleteEvents(req.params.id);
+    await eventCategoriesModels.deleteEventsCategories(req.params.id);
+
+    return res.json({
+      success: true,
+      message: `Delete Event Successfully`,
+    });
+  } catch (err) {
+    fileRemover(req.file);
     return errorHandler(err, res);
   }
 };
