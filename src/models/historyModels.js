@@ -4,6 +4,7 @@ exports.getHistoryById = async (id) => {
   try {
     const query = `
 SELECT
+"reserv"."id",
     "e"."title",
     "c"."name" as "location",
     "p"."fullName" as "fullname",
