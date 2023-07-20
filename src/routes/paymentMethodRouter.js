@@ -6,7 +6,7 @@ const validate = require("../middlewares/validator.middleware");
 paymentMethod.get("/", paymentMethodController.getPaymentMethod);
 
 paymentMethod.post(
-  "/create", validate("nameFormat"),
+  "/", validate("nameFormat"),
   paymentMethodController.createPaymentMethod
 );
 
