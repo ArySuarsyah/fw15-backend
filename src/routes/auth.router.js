@@ -19,7 +19,7 @@ auth.post("/forgot-password", forgotPassword);
 
 auth.post("/reset-password", validate("resetPassword"), resetPassword);
 
-auth.post(
+auth.patch(
   "/change-password",
   authMiddleware,
   validate("changePassword"),
