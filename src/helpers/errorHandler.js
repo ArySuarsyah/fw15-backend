@@ -101,25 +101,25 @@ const errorHandler = (err, res) => {
     });
   }
 
-    if (err.message.includes("no_forgot_request")) {
-      return res.status(400).json({
-        succes: false,
-        message: "Error: Request not found",
-      });
-    }
+  if (err.message.includes("no_forgot_request")) {
+    return res.status(400).json({
+      succes: false,
+      message: "Error: Request not found",
+    });
+  }
 
-  if (err.message ==  "reservation not found!") {
-      return res.status(400).json({
-        succes: false,
-        message: "Error: Reservation not found",
-      });
+  if (err.message == "reservation not found!") {
+    return res.status(400).json({
+      succes: false,
+      message: "Error: Reservation not found",
+    });
   }
 
   if (err.message == "Nothing transaction!") {
     return res.status(500).json({
       succes: false,
       message: "Error: Make a transaction first",
-    })
+    });
   }
 
   if (err.message == "Please insert a new password") {
@@ -136,7 +136,18 @@ const errorHandler = (err, res) => {
     });
   }
 
-console.log(err);
+  if (
+    err.message.includes(
+      "Cannot read properties of undefined (reading 'password')"
+    )
+  ) {
+    return res.status(400).json({
+      succes: false,
+      message: "Wrong email or password",
+    });
+  }
+
+  console.log(err);
   return res.status(500).json({
     succes: false,
     message: "Something happend in our backend",
