@@ -6,8 +6,12 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 
+const corsOptions = {
+  origin: "https://localhost:5173",
+};
 
-app.use(cors());
+app.use(cors(corsOptions));
+
 
 app.use(express.urlencoded({ extended: false }));
 app.use("/", require("./src/routes"));
