@@ -38,13 +38,14 @@ exports.register = async (req, res) => {
     if (password !== confirmPassword) {
       throw Error("Password unmatch");
     }
+
     const hash = await argon.hash(password);
     const data = {
       ...req.body,
       password: hash,
     };
-
     const user = await insert(data);
+
     const profileData = {
       fullName,
       userId: user.id,
