@@ -16,7 +16,6 @@ router.use("/reservationTicket", require("./reservationTicketRouter"));
 router.use("/wishlist", authMiddleware, require("./wishlistRouter"));
 router.use("/categories", require("./categoriesRouter"));
 router.use("/admin", authMiddleware, require("./admin/admin.router"));
-router.use("/updateProfile", require("./profile.router"));
 router.use("/device-token", authMiddleware, require("./deviceTokenRouter"));
 
 // Main Business Flow
