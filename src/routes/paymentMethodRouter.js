@@ -18,7 +18,7 @@ paymentMethod.get(
 
 paymentMethod.patch(
   "/:id",
-  uploadMiddleware("picture"), validate("updateName"),
+  uploadMiddleware, validate("updateName"),
   paymentMethodController.updatePaymentMethod
 );
 

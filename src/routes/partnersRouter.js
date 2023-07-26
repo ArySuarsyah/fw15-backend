@@ -6,14 +6,14 @@ const validate = require("../middlewares/validator.middleware");
 partner.get("/", partnersCotroller.getPartners);
 partner.post(
   "/",
-  uploadMiddleware("picture"),
+  uploadMiddleware,
   validate("nameFormat"),
   partnersCotroller.createPartners
 );
 partner.get("/:id", validate("paramsId"), partnersCotroller.getPartnersById);
 partner.patch(
   "/:id",
-  uploadMiddleware("picture"),
+  uploadMiddleware,
   validate("updateName"),
   partnersCotroller.updatePartners
 );

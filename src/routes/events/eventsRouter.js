@@ -7,7 +7,7 @@ const validate = require("../../middlewares/validator.middleware");
 eventRouter.get("/", eventsController.getEvents);
 eventRouter.post(
   "/",
-  uploadMiddleware("picture"),
+  uploadMiddleware,
   validate("createEvent"),
   eventsController.createEvents
 );
@@ -18,7 +18,7 @@ eventRouter.get(
 );
 eventRouter.patch(
   "/:id",
-  uploadMiddleware("picture"),
+  uploadMiddleware,
   validate("createEvent"),
   eventsController.updateEvents
 );

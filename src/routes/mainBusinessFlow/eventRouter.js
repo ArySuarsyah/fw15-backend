@@ -8,13 +8,13 @@ eventRouter.get("/", eventsController.getAllEvents);
 
 eventRouter.post(
   "/manage/create",
-  uploadMiddleware("picture"),
+  uploadMiddleware,
   eventsController.insertEvent
 );
 
 eventRouter.patch(
   "/manage/update/:id",
-  uploadMiddleware("picture"),
+  uploadMiddleware,
   eventsController.updateEv
 );
 
@@ -25,7 +25,7 @@ eventRouter.delete(
 
 // eventRouter.post(
 //   "/",
-//   uploadMiddleware("picture"),
+//   uploadMiddleware,
 //   validate("createEvent"),
 //   eventsController.createEvents
 // );

@@ -4,11 +4,11 @@ const userController = require('../../controller/admin/users.controller');
 const uploadMiddleware = require("../../middlewares/upload.middlewares");
 
 usersRouter.get("/", userController.getAllUsers);
-usersRouter.post("/", uploadMiddleware("picture"), userController.createUser);
+usersRouter.post("/", uploadMiddleware, userController.createUser);
 usersRouter.get("/:id", userController.getUserById);
 usersRouter.patch(
   "/:id",
-  uploadMiddleware("picture"),
+  uploadMiddleware,
   userController.updateUsers
 );
 usersRouter.delete("/:id", userController.deleteUsers);
