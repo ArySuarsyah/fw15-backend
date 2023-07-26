@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
@@ -72,7 +73,8 @@ const uploadMiddleware = upload.single("picture");
 module.exports = (req, res, next) => {
   uploadMiddleware(req, res, (err) => {
     if (err) {
-      return errorHandler(err, res);
+      // return errorHandler(err, res);
+      console.log(err)
     }
     next();
   });
