@@ -118,15 +118,15 @@ exports.deleteEvents = async (req, res) => {
 exports.getAllEvents = async (req, res) => {
   try {
     const filter = {
-      limit: parseInt(req.query.limit) || 10,
+      limit: parseInt(req.query.limit) || 5,
       page: (parseInt(req.query.page) - 0) * req.query.limit || 0,
       searchByName: req.query.searchByName || "",
-      searchByCategory: req.query.searchByCategory || "",
+      searchByCategory: req.query.searchByCategories || "",
       searchByLocation: req.query.searchByLocation || "",
       sort: req.query.sort || "id",
       sortBy: req.query.sortBy || "ASC",
     };
-
+console.log(filter);
     const data = await eventCategoriesModels.findAllByEventId(filter);
 
     return res.status(200).json({
