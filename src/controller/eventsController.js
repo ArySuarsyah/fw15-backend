@@ -126,7 +126,7 @@ exports.getAllEvents = async (req, res) => {
       sort: req.query.sort || "id",
       sortBy: req.query.sortBy || "ASC",
     };
-console.log(filter);
+
     const data = await eventCategoriesModels.findAllByEventId(filter);
 
     return res.status(200).json({
