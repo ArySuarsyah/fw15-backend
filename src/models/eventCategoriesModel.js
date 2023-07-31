@@ -94,7 +94,7 @@ exports.findAllByEventId = async (filter) => {
     LIMIT $1
     OFFSET $2
   `;
-    
+
     const values = [
       filter.limit,
       filter.page,
