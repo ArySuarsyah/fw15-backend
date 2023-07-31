@@ -26,7 +26,6 @@ exports.createReservations = async (req, res) => {
       results: event,
     });
   } catch (err) {
-    fileRemover(req.file);
     return errorHandler(err, res);
   }
 };
