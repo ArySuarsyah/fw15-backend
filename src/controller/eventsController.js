@@ -175,15 +175,16 @@ exports.insertEvent = async (req, res) => {
 exports.updateEv = async (req, res) => {
   try {
     const { id } = req.params;
-    const event = await eventCategoriesModels.findOneById(id);
+    // const event = await eventCategoriesModels.findOneById(id);
     const { categoryId } = req.body;
     const data = {
       ...req.body,
     };
     if (req.file) {
-      if (event.picture) {
-        fileRemover({ filename: event.picture });
-      }
+      // if (event.picture) {
+      //   fileRemover({ filename: event.picture });
+      // }
+
       data.picture = req.file.filename;
     }
     const eventData = await eventModel.updateEvents(data, id);
