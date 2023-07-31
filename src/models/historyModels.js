@@ -9,7 +9,6 @@ SELECT
     "c"."name" as "location",
     "p"."fullName" as "fullname",
     "section"."name",
-    "section"."quantity",
     "section"."price",
     "pay"."name" as "paymentMethod",
     "status"."name" as "status",
