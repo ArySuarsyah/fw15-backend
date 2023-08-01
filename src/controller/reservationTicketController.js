@@ -19,9 +19,7 @@ exports.getReservationTicket = async (req, res) => {
 
 exports.createReservationTicket = async (req, res) => {
   try {
-    if (req.file) {
-      req.body.picture = req.file.createEventfilename;
-    }
+
     const event = await reservationTicketModel.createReservationTicket(
       req.body
     );
