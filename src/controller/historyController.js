@@ -8,8 +8,8 @@ exports.getHistory = async (req, res) => {
     if (!id) {
       throw Error("id_not_found");
     }
-
     const data = await historyModel.getHistoryById(id);
+
 
     if (!data) {
       throw Error("Nothing transaction!");
