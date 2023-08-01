@@ -20,6 +20,7 @@ exports.getReservations = async (req, res) => {
 exports.createReservations = async (req, res) => {
   try {
     const event = await reservationsModel.createReservations(req.body);
+
     return res.json({
       success: true,
       message: `Create Reservation ${event.id} successfully`,
