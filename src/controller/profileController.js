@@ -2,7 +2,7 @@ const profileModels = require("../models/profileModel");
 const fileRemover = require("../helpers/fileRemover");
 const errorHandler = require("../helpers/errorHandler");
 const filterData = require("../helpers/filter.helper");
-
+const usersModel = require("../models/users.model")
 exports.getProfile = async (req, res) => {
   try {
     const filter = filterData(req.query);
@@ -113,6 +113,10 @@ exports.updateProfileByUserId = async (req, res) => {
         fileRemover({ filename: user.picture });
       }
       data.picture = req.file.filename;
+    }
+
+    if (data.userName) {
+      await usersModel.update(data.userName);
     }
 
     const profile = await profileModels.updateProfileByUserId(id, data);

@@ -45,9 +45,9 @@ exports.insert = async (data) => {
   INSERT INTO "users" ("userName", "email", "password") VALUES ($1, $2, $3) RETURNING *
   `;
   const value = [data.userName, data.email, data.password];
-console.log(value)
+
   const { rows } = await db.query(query, value);
-console.log(rows)
+
   return rows[0];
 };
 
