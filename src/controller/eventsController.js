@@ -117,15 +117,16 @@ exports.deleteEvents = async (req, res) => {
 
 exports.getAllEvents = async (req, res) => {
   try {
-    const filter = {
-      limit: parseInt(req.query.limit) || 5,
-      page: (parseInt(req.query.page) - 0) * req.query.limit || 0,
-      searchByName: req.query.searchByName || "",
-      searchByCategory: req.query.searchByCategories || "",
-      searchByLocation: req.query.searchByLocation || "",
-      sort: req.query.sort || "id",
-      sortBy: req.query.sortBy || "ASC",
-    };
+const filter = {
+  limit: parseInt(req.query.limit) || 5,
+  page: (parseInt(req.query.page) - 1) * parseInt(req.query.limit) || 0,
+  searchByName: req.query.searchByName || "",
+  searchByCategory: req.query.searchByCategories || "",
+  searchByLocation: req.query.searchByLocation || "",
+  sort: req.query.sort || "id",
+  sortBy: req.query.sortBy || "ASC",
+};
+
 
     const data = await eventCategoriesModels.findAllByEventId(filter);
 
