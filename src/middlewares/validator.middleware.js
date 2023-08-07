@@ -75,10 +75,6 @@ const reservTicketFormat = {
     .withMessage("Quantity Id is invalid!"),
 };
 
-const wishlistFormat = {
-  eventId: createReservationFormat.eventId,
-  userId: createReservationFormat.userId,
-};
 
 const eventFormat = {
   title: body("title")
@@ -243,7 +239,6 @@ const rules = {
   updateReservSection: Object.values(updateReservSectionFormat), //
   createReservTicket: Object.values(reservTicketFormat),
   updateReservTicket: Object.values(updateReservTicketFormat), //
-  creatWishlist: Object.values(wishlistFormat),
   updateWishlist: Object.values(updateWishlistFormat),
   createEvent: Object.values(eventFormat),
   updateEvent: Object.values(updateEventFormat),
