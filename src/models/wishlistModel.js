@@ -33,7 +33,16 @@ exports.createWishlist = async (data) => {
 
 exports.getWishlistById = async (id) => {
   const query = `
-SELECT * FROM "wishlist" WHERE "id" = $1
+SELECT
+"e"."id",
+"e"."title",
+"e"."date",
+"ct"."name" as "location",
+"e"."description"
+FROM "wishlist" "ws"
+JOIN "events" "e" on "ws"."eventId" = "e"."id"
+JOIN "cities" "c" on "e"."cityId" = "c"."id"
+WHERE "id" = $1
   `;
 
   const value = [id];
@@ -60,4 +69,26 @@ exports.deleteWishlist = async (id) => {
   `;
   const { rows } = await db.query(query, [id]);
   return rows[0];
+};
+
+// main flow
+
+exports.getWishlistByUserId = async (id) => {
+  const query = `
+SELECT
+"e"."id",
+"e"."title",
+"e"."date",
+"ct"."name" as "location",
+"e"."description"
+FROM "wishlist" "ws"
+JOIN "events" "e" on "ws"."eventId" = "e"."id"
+JOIN "cities" "ct" on "e"."cityId" = "ct"."id"
+WHERE "ws"."userId" = $1
+  `;
+  console.log(id);
+  const value = [id];
+  const { rows } = await db.query(query, value);
+
+  return rows;
 };

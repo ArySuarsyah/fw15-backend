@@ -1,12 +1,15 @@
 const wishlist = require("express").Router();
 const wishlistController = require("../controller/wishlistController");
 const validate = require("../middlewares/validator.middleware");
+// const authMiddleware = require("../middlewares/auth.middleware");
 
 wishlist.get("/", wishlistController.getWishlist);
 
+wishlist.get("/list", wishlistController.getWishlistByUserId);
+
+
 wishlist.post(
   "/",
-  validate("creatWishlist"),
   wishlistController.createWishlist
 );
 
