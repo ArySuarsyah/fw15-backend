@@ -20,7 +20,16 @@ exports.getWishlist = async (req, res) => {
 exports.createWishlist = async (req, res) => {
   try {
 
-    const event = await wishlistModel.createWishlist(req.body);
+    const { id } = req.user;
+    if (!id) {
+      throw Error("id_not_found");
+    }
+
+
+    const wishlistData = {
+      ...req.body,
+    };
+    const event = await wishlistModel.createWishlist(wishlistData);
     return res.json({
       success: true,
       message: `Create Wishlist ${event.id} successfully`,
@@ -89,6 +98,41 @@ exports.deleteWishlist = async (req, res) => {
       success: false,
       message: "Wishlist not found!",
     });
+  } catch (err) {
+    return errorHandler(err, res);
+  }
+};
+
+exports.getWishlistByUserId = async (req, res) => {
+  try {
+    const { id } = req.user;
+
+
+    if (!id) {
+      throw Error("id_not_found");
+    }
+    const data = await wishlistModel.getWishlistByUserId(id);
+    if (!data) {
+      throw Error("Nothing Wishlist!");
+    }
+
+    if (data.length <= 0) {
+      throw Error("Nothing Wishlist!");
+    }
+    console.log(data)
+
+    if (data) {
+      return res.status(200).json({
+        success: true,
+        message: "Access success",
+        results: data,
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: "Wishlist not found!",
+      });
+    }
   } catch (err) {
     return errorHandler(err, res);
   }
