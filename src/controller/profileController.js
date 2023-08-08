@@ -101,6 +101,7 @@ exports.deleteProfile = async (req, res) => {
 };
 
 exports.updateProfileByUserId = async (req, res) => {
+  console.log(req)
   try {
     const { id } = req.user;
     const user = await profileModels.getProfileByUserId(id);
