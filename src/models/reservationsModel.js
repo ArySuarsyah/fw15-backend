@@ -151,7 +151,7 @@ exports.create = async (data) => {
       data.paymentMethodId,
     ];
     const { rows } = await db.query(query, values);
-    return rows;
+    return rows[0];
   } catch (err) {
     if (err) throw err;
   }
