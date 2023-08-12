@@ -137,8 +137,6 @@ exports.changePassword = async (req, res) => {
       throw Error("Login first");
     }
 
-    console.log(req.body)
-
     const verify = await argon.verify(find.password, oldPassword);
     const verifyNewPassword = await argon.verify(find.password, newPassword);
 
