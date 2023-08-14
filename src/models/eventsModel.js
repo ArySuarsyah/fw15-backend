@@ -128,7 +128,7 @@ exports.insertEvent = async (data) => {
     VALUES ($1, $2, $3, $4, $5)
     RETURNING *
   `;
-    
+
     const values = [
       data.picture,
       data.title,

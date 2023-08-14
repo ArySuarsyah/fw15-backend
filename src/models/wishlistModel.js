@@ -86,7 +86,7 @@ JOIN "events" "e" on "ws"."eventId" = "e"."id"
 JOIN "cities" "ct" on "e"."cityId" = "ct"."id"
 WHERE "ws"."userId" = $1
   `;
-  console.log(id);
+
   const value = [id];
   const { rows } = await db.query(query, value);
 

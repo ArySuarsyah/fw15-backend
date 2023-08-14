@@ -117,16 +117,15 @@ exports.deleteEvents = async (req, res) => {
 
 exports.getAllEvents = async (req, res) => {
   try {
-const filter = {
-  limit: parseInt(req.query.limit) || 5,
-  page: (parseInt(req.query.page) - 1) * parseInt(req.query.limit) || 0,
-  searchByName: req.query.searchByName || "",
-  searchByCategory: req.query.searchByCategories || "",
-  searchByLocation: req.query.searchByLocation || "",
-  sort: req.query.sort || "id",
-  sortBy: req.query.sortBy || "ASC",
-};
-
+    const filter = {
+      limit: parseInt(req.query.limit) || 5,
+      page: (parseInt(req.query.page) - 1) * parseInt(req.query.limit) || 0,
+      searchByName: req.query.searchByName || "",
+      searchByCategory: req.query.searchByCategories || "",
+      searchByLocation: req.query.searchByLocation || "",
+      sort: req.query.sort || "id",
+      sortBy: req.query.sortBy || "ASC",
+    };
 
     const data = await eventCategoriesModels.findAllByEventId(filter);
 
@@ -142,17 +141,16 @@ const filter = {
 
 exports.insertEvent = async (req, res) => {
   try {
+console.log(req.body);
     const { categoryId } = req.body;
-
     const data = {
       ...req.body,
     };
     if (req.file) {
       data.picture = req.file.filename;
     }
-
-
     const eventData = await eventModel.insertEvent(data);
+
     const ecData = {
       eventId: eventData.id,
       categoryId,
@@ -208,10 +206,8 @@ exports.updateEv = async (req, res) => {
   }
 };
 
-
 exports.deleteEvent = async (req, res) => {
   try {
-
     await eventModel.deleteEvents(req.params.id);
     await eventCategoriesModels.deleteEventsCategories(req.params.id);
 

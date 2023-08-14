@@ -19,12 +19,11 @@ exports.getWishlist = async (req, res) => {
 
 exports.createWishlist = async (req, res) => {
   try {
-
     const { id } = req.user;
+
     if (!id) {
       throw Error("id_not_found");
     }
-
 
     const wishlistData = {
       ...req.body,
@@ -107,7 +106,6 @@ exports.getWishlistByUserId = async (req, res) => {
   try {
     const { id } = req.user;
 
-
     if (!id) {
       throw Error("id_not_found");
     }
@@ -119,7 +117,7 @@ exports.getWishlistByUserId = async (req, res) => {
     if (data.length <= 0) {
       throw Error("Nothing Wishlist!");
     }
-    console.log(data)
+
 
     if (data) {
       return res.status(200).json({
