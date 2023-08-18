@@ -5,8 +5,7 @@ const  uploadMiddleware  = require("../middlewares/upload.middlewares");
 // const authMiddleware = require("../middlewares/auth.middleware");
 
 profileRouter.post(
-  "/",
-  uploadMiddleware,
+  "/", uploadMiddleware,
   profileController.updateProfileByUserId
 );
 

@@ -3,7 +3,7 @@
 require("dotenv").config({
   path: ".env",
 });
-const { Pool } = require("pg"); // untuk membuat koneksi pada database
+const { Pool } = require("pg"); 
 
 const connectionString = process.env.DATABASE;
 

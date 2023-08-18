@@ -2,7 +2,7 @@ const profileModels = require("../models/profileModel");
 const fileRemover = require("../helpers/fileRemover");
 const errorHandler = require("../helpers/errorHandler");
 const filterData = require("../helpers/filter.helper");
-const usersModel = require("../models/users.model")
+const usersModel = require("../models/users.model");
 exports.getProfile = async (req, res) => {
   try {
     const filter = filterData(req.query);
@@ -101,23 +101,19 @@ exports.deleteProfile = async (req, res) => {
 };
 
 exports.updateProfileByUserId = async (req, res) => {
-  console.log(req.body)
   try {
     const { id } = req.user;
-    const user = await profileModels.getProfileByUserId(id);
+    // const user = await profileModels.getProfileByUserId(id);
     const data = {
       ...req.body,
     };
 
     if (req.file) {
-      if (user.picture) {
-        fileRemover({ filename: user.picture });
-      }
       data.picture = req.file.filename;
     }
 
     if (data.userName) {
-      await usersModel.update(data.userName);
+      await usersModel.update(data.userName, id);
     }
 
     const profile = await profileModels.updateProfileByUserId(id, data);
@@ -153,8 +149,6 @@ exports.readProfile = async (req, res) => {
     return errorHandler(err, res);
   }
 };
-
-
 
 exports.updateFingerprint = async (req, res) => {
   try {
