@@ -76,7 +76,9 @@ exports.deleteWishlist = async (id) => {
 exports.getWishlistByUserId = async (id) => {
   const query = `
 SELECT
-"e"."id",
+"ws"."id",
+"e"."picture",
+"e"."id" as "eventId",
 "e"."title",
 "e"."date",
 "ct"."name" as "location",
