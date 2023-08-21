@@ -4,7 +4,7 @@ exports.getRequestByEmailAndCode = async (code, email) => {
   try {
     const query = `
     SELECT * FROM "forgotRequest"
-    WHERE "code" =$1 AND "email" =$2
+    WHERE "code" = $1 AND "email" =$2
   `;
 
     const values = [code, email];
