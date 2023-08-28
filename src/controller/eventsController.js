@@ -139,13 +139,40 @@ exports.getAllEvents = async (req, res) => {
   }
 };
 
+exports.getEventsByUserId = async (req, res) => {
+  try {
+    const { id } = req.user;
+
+    if (!id) {
+      throw Error("id_not_found");
+    }
+
+    const data = await eventCategoriesModels.findAllByUserId(id);
+
+    return res.status(200).json({
+      success: true,
+      message: "List all Events",
+      results: data,
+    });
+  } catch (err) {
+    return errorHandler(err, res);
+  }
+};
+
 exports.insertEvent = async (req, res) => {
   try {
-console.log(req.body);
+    const { id } = req.user;
+
+    if (!id) {
+      throw Error("id_not_found");
+    }
+
     const { categoryId } = req.body;
     const data = {
       ...req.body,
+      id,
     };
+    console.log(data);
     if (req.file) {
       data.picture = req.file.filename;
     }

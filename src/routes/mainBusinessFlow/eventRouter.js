@@ -5,6 +5,8 @@ const uploadMiddleware = require("../../middlewares/upload.middlewares");
 // const validate = require("../../middlewares/validator.middleware");
 
 eventRouter.get("/", eventsController.getAllEvents);
+eventRouter.get("/user", eventsController.getEventsByUserId);
+
 
 eventRouter.post(
   "/manage/create",

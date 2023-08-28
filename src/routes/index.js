@@ -20,7 +20,7 @@ router.use("/device-token", authMiddleware, require("./deviceTokenRouter"));
 
 // Main Business Flow
 
-router.use("/events", require("./mainBusinessFlow/eventRouter"));
+router.use("/events", authMiddleware, require("./mainBusinessFlow/eventRouter"));
 router.use(
   "/payment",
   authMiddleware,

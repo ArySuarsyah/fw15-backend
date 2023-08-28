@@ -196,3 +196,30 @@ exports.findOneForDelete = async (id) => {
     if (err) throw err;
   }
 };
+
+exports.findAllByUserId = async (id) => {
+  try {
+    const query = `
+    SELECT
+    "e"."id",
+    "e"."userId",
+    "e"."picture",
+    "e"."title",
+    "e"."date", "ct"."name" as "location",
+    "cat"."name" as "category",
+    "e"."description" as "description"
+    FROM "eventCategories" "ec"
+    JOIN "events" "e" ON "e"."id" = "ec"."eventId"
+    JOIN "cities" "ct" ON "ct"."id" = "e"."cityId"
+    JOIN "categories" "cat" ON "cat"."id" = "ec"."categoryId"
+    WHERE "e"."userId" = $1
+  `;
+
+  const value = [id];
+  const { rows } = await db.query(query, value);
+
+  return rows[0];
+  } catch (err) {
+    if (err) throw err;
+  }
+};

@@ -124,15 +124,16 @@ WHERE "ec"."eventId" = 12
 exports.insertEvent = async (data) => {
   try {
     const query = `
-    INSERT INTO "events" ("picture", "title", "cityId", "date", "description")
-    VALUES ($1, $2, $3, $4, $5)
+    INSERT INTO "events" ("picture", "title", "cityId", "userId", "date", "description")
+    VALUES ($1, $2, $3, $4, $5, $6)
     RETURNING *
   `;
-
+console.log(data)
     const values = [
       data.picture,
       data.title,
       data.cityId,
+      data.id,
       data.date,
       data.description,
     ];
@@ -142,3 +143,5 @@ exports.insertEvent = async (data) => {
     if (err) throw err;
   }
 };
+
+
