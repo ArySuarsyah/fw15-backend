@@ -218,7 +218,7 @@ exports.findAllByUserId = async (id) => {
   const value = [id];
   const { rows } = await db.query(query, value);
 
-  return rows[0];
+  return rows;
   } catch (err) {
     if (err) throw err;
   }
