@@ -146,6 +146,12 @@ const errorHandler = (err, res) => {
       message: "Wrong email or password",
     });
   }
+  if (err.message.includes('invalid input syntax for type integer:')) {
+    return res.status(500).json({
+      succes: false,
+      message: "All fields must be filled in!",
+    });
+  }
 
   console.log(err);
   return res.status(500).json({
