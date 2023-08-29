@@ -172,7 +172,7 @@ exports.insertEvent = async (req, res) => {
       ...req.body,
       id,
     };
-    console.log(data);
+
     if (req.file) {
       data.picture = req.file.filename;
     }
